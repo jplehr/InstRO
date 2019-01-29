@@ -11,7 +11,7 @@ add_subdirectory(tooling)
 # To build the clang abstraction layer implementation
 add_library(InstRO_clang SHARED ClangInstrumentor)
 
-target_include_directories(InstRO_clang PUBLIC "${CMAKE_SOURCE_DIR}/lib/include")
+target_include_directories(InstRO_clang PUBLIC ${instro_include_path} "${Boost_INCLUDE_DIRS}")
 target_compile_options(InstRO_clang PUBLIC ${instro_default_options})
 
 # Have a short hand.
