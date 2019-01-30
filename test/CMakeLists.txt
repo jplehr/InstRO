@@ -12,4 +12,5 @@ string(REGEX REPLACE "clang-format|clang-import-test|clang-rename|clang-refactor
 
 target_include_directories(ConstructHierarchySelectionTest PUBLIC ${instro_include_path} ${CMAKE_CURRENT_SOURCE_DIR} ${Boost_INCLUDE_DIRS})
 target_compile_options(ConstructHierarchySelectionTest PUBLIC ${instro_default_options})
-target_link_libraries(ConstructHierarchySelectionTest InstRO_clang_test InstRO ${CLANG_EXPORTED_TARGETS} LLVMSupport ${Boost_LIBRARIES})
+
+target_link_libraries(ConstructHierarchySelectionTest InstRO_clang_test InstRO ${instro_compiler_L_items} LLVMSupport ${Boost_LIBRARIES})
