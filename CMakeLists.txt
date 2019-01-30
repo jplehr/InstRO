@@ -8,18 +8,26 @@ find_package(Clang REQUIRED CONFIG)
 find_package(LLVM REQUIRED CONFIG)
 find_package(Boost REQUIRED COMPONENTS system iostreams program_options)
 
-# TODO I think we can move this to the respective targets
-include_directories(${LLVM_INCLUDE_DIRS})
-include_directories(${LLVM_DEFINITIONS})
+string(REGEX REPLACE "clang-format|clang-import-test|clang-rename|clang-refactor|clang-reorder-fields|modularize|clang-tidy|clangd" "" CLANG_EXPORTED_TARGETS "${CLANG_EXPORTED_TARGETS}")
+
+set(instro_compiler_I_items "${LLVM_INCLUDE_DIRS}")
+set(instro_compiler_L_items "${CLANG_EXPORTED_TARGETS}")
+
 
 # Standard compile options InstRO uses
 set(instro_default_options -std=c++14 -Werror=return-type)
 set(instro_include_path "${CMAKE_SOURCE_DIR}/lib/include" "${CMAKE_BINARY_DIR}/lib/include")
 
-#message(STATUS "CMake instro_include_path: " ${instro_include_path})
+# We add the compiler-dependent includes to the include path
+list(APPEND instro_include_path "${instro_compiler_I_items}")
 
-# FIXME: Make this configurable.
-#include_directories(/opt/modules/sw_repo/boost/1.64/include)
+
+message(STATUS "Used Includes: " ${instro_include_path})
+message(STATUS "Clang: " ${Clang_DIR})
+message(STATUS "Boost: " ${Boost_INCLUDE_DIRS})
+message(STATUS "Back-end I-items: " ${instro_compiler_I_items})
+message(STATUS "Back-end L-items: " ${instro_compiler_L_items})
+
 
 # To select the Compiler backend InstRO wants to use
 # TODO As soon as we port the Rose build to CMake, we need to make this configurable

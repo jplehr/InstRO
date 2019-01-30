@@ -7,6 +7,5 @@ add_library(InstRO_tooling  SHARED ConstructElevator
 														NamedConstructAccess)
 
 target_compile_options(InstRO_tooling PUBLIC ${instro_default_options})
-message(STATUS "Boost: " ${Boost_INCLUDE_DIRS})
 target_include_directories(InstRO_tooling PUBLIC "${instro_include_path}" "${Boost_INCLUDE_DIRS}")
 
