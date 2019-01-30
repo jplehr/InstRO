@@ -18,50 +18,50 @@ class RosePassFactory;
 
 class RoseInstrumentor : public Instrumentor {
  public:
-	RoseInstrumentor(int argc, char **argv) : passFactory(nullptr) {
-		InstRO::Utility::RoseCLIPreparation prepStrat(&argc, &argv);
+  RoseInstrumentor(int argc, char **argv) : passFactory(nullptr) {
+    InstRO::Utility::RoseCLIPreparation prepStrat(&argc, &argv);
 
-		std::vector<std::string> argVec = prepStrat.getCommandLine();
+    std::vector<std::string> argVec = prepStrat.getCommandLine();
 
-		project = ::frontend(argVec);
+    project = ::frontend(argVec);
 
-		ram = new InstRO::Rose::Tooling::RoseAnalysisManager(project);
-		InstRO::setInstrumentorInstance(this);
-	}
+    ram = new InstRO::Rose::Tooling::RoseAnalysisManager(project);
+    InstRO::setInstrumentorInstance(this);
+  }
 
-	~RoseInstrumentor() {
-		delete project;
-		delete passFactory;
-		delete ram;
-	}
+  ~RoseInstrumentor() {
+    delete project;
+    delete passFactory;
+    delete ram;
+  }
 
-	virtual Rose::RosePassFactory *getFactory(
-			Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
-		if (!passFactory) {
-			passFactory = new Rose::RosePassFactory(passManager, project);
-		}
+  virtual Rose::RosePassFactory *getFactory(
+      Instrumentor::CompilationPhase phase = Instrumentor::CompilationPhase::frontend) override {
+    if (!passFactory) {
+      passFactory = new Rose::RosePassFactory(passManager, project);
+    }
 
-		return passFactory;
-	}
+    return passFactory;
+  }
 
-	void apply() override {
-		passManager->execute();
-		project->unparse();
-		if (!project->get_skipfinalCompileStep()) {
-			int err = project->compileOutput();
-			if (err) {
-				throw std::string("There was an error compiling the unparsed sources");
-			}
-		}
-	}
+  void apply() override {
+    passManager->execute();
+    project->unparse();
+    if (!project->get_skipfinalCompileStep()) {
+      int err = project->compileOutput();
+      if (err) {
+        throw std::string("There was an error compiling the unparsed sources");
+      }
+    }
+  }
 
-	virtual Tooling::AnalysisManager *getAnalysisManager() override { return ram; }
+  virtual Tooling::AnalysisManager *getAnalysisManager() override { return ram; }
 
  protected:
-	// Store the Project. It is required for all passes later on ..
-	SgProject *project;
-	InstRO::Rose::Tooling::RoseAnalysisManager *ram;
-	Rose::RosePassFactory *passFactory;
+  // Store the Project. It is required for all passes later on ..
+  SgProject *project;
+  InstRO::Rose::Tooling::RoseAnalysisManager *ram;
+  Rose::RosePassFactory *passFactory;
 };
-}
+}  // namespace InstRO
 #endif

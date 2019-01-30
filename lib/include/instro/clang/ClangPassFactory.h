@@ -11,7 +11,7 @@
 namespace clang {
 // forward declaration
 class ASTContext;
-}	// namespace clang
+}  // namespace clang
 
 namespace InstRO {
 namespace Clang {
@@ -25,24 +25,24 @@ class ASTContextProvider;
  */
 class ClangPassFactory : public InstRO::PassFactory {
  public:
-	ClangPassFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& reps)
-			: InstRO::PassFactory(manager), replacements(reps) {}
+  ClangPassFactory(InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &reps)
+      : InstRO::PassFactory(manager), replacements(reps) {}
 
-	InstRO::Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input) { return nullptr; }
+  InstRO::Pass *createDefaultInstrumentationAdapter(InstRO::Pass *input) { return nullptr; }
 
-	Pass* createClangBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
-	Pass* createClangCygProfileAdapter(InstRO::Pass* input);
-	Pass* createClangMangledNameOutputAdapter(InstRO::Pass* input);
+  Pass *createClangBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
+  Pass *createClangCygProfileAdapter(InstRO::Pass *input);
+  Pass *createClangMangledNameOutputAdapter(InstRO::Pass *input);
 
-	/* We need this in order to lazily initialize the AST Context within the passes */
-	void finishConstruction(clang::ASTContext* context);
+  /* We need this in order to lazily initialize the AST Context within the passes */
+  void finishConstruction(clang::ASTContext *context);
 
  protected:
-	std::set<InstRO::Clang::ASTContextProvider*> lazyContextProvidingMap;
+  std::set<InstRO::Clang::ASTContextProvider *> lazyContextProvidingMap;
 
  private:
-	clang::tooling::Replacements& replacements;
+  clang::tooling::Replacements &replacements;
 };
-}	// namespace Clang
-}	// namespace InstRO
+}  // namespace Clang
+}  // namespace InstRO
 #endif

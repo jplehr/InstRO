@@ -16,29 +16,29 @@ namespace Utility {
  */
 class BWLFileReader {
  public:
-	BWLFileReader(std::string filename);
+  BWLFileReader(std::string filename);
 
-	/*
-	 * Returns the parsed black and whitelist, where the first member of the pair is
-	 * the blacklist and the second is the whitelist
-	 */
-	std::pair<std::vector<std::string>, std::vector<std::string>> getBWList();
+  /*
+   * Returns the parsed black and whitelist, where the first member of the pair is
+   * the blacklist and the second is the whitelist
+   */
+  std::pair<std::vector<std::string>, std::vector<std::string>> getBWList();
 
-	/*
-	 * Should this be private?
-	 */
+  /*
+   * Should this be private?
+   */
  protected:
-	void readFile();
-	std::string prepareName(std::string name, std::string specifier);
+  void readFile();
+  std::string prepareName(std::string name, std::string specifier);
 
  private:
-	std::string wSpecifier, bSpecifier;
-	std::string filename;
-	std::vector<std::string> blacklist;
-	std::vector<std::string> whitelist;
-	bool hasBeenRead;
+  std::string wSpecifier, bSpecifier;
+  std::string filename;
+  std::vector<std::string> blacklist;
+  std::vector<std::string> whitelist;
+  bool hasBeenRead;
 };
-}	// namespace Utility
-}	// end namespace InstRO
+}  // namespace Utility
+}  // end namespace InstRO
 
 #endif

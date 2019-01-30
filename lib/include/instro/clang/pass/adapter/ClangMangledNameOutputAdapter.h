@@ -11,19 +11,19 @@ namespace Adapter {
 
 class ClangMangledNameOutputAdapter : public InstRO::Clang::ClangPassImplBase<ClangMangledNameOutputAdapter> {
  public:
-	ClangMangledNameOutputAdapter();
+  ClangMangledNameOutputAdapter();
 
-	bool VisitFunctionDecl(clang::FunctionDecl* fDecl);
+  bool VisitFunctionDecl(clang::FunctionDecl *fDecl);
 
-	void exec() override;
+  void exec() override;
 
  private:
-	const std::string outfileName;
+  const std::string outfileName;
 
-	void print(std::ostream& outStream, const InstRO::Core::ConstructSet* cs, clang::ASTContext* astContext);
+  void print(std::ostream &outStream, const InstRO::Core::ConstructSet *cs, clang::ASTContext *astContext);
 };
-}	// namespace Adapter
-}	// namespace Clang
-}	// namespace InstRO
+}  // namespace Adapter
+}  // namespace Clang
+}  // namespace InstRO
 
 #endif

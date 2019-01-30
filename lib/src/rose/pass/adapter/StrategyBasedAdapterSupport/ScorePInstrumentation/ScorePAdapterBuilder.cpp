@@ -3,7 +3,7 @@
 namespace InstRO {
 namespace Rose {
 namespace Adapter {
-namespace StrategyBasedAdapterSupport{
+namespace StrategyBasedAdapterSupport {
 #if 0
 ScorePAdapterBuilder::ScorePAdapterBuilder(Selector* decidingSelector) :
 	GenericAdapterBuilder(decidingSelector), initializer(),
@@ -20,7 +20,7 @@ ScorePAdapterBuilder::~ScorePAdapterBuilder() {
 
 }
 #endif
-}
-}
-}
-}
+}  // namespace StrategyBasedAdapterSupport
+}  // namespace Adapter
+}  // namespace Rose
+}  // namespace InstRO

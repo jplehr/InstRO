@@ -13,18 +13,18 @@ namespace ConstructTraitInterface {
 
 class ClangConstructTraitInterface : public InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface {
  public:
-	ClangConstructTraitInterface(clang::ASTContext& context) : context(context) {}
-	ClangConstructTraitInterface() = delete;
-	virtual ~ClangConstructTraitInterface() {}
+  ClangConstructTraitInterface(clang::ASTContext &context) : context(context) {}
+  ClangConstructTraitInterface() = delete;
+  virtual ~ClangConstructTraitInterface() {}
 
-	InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) override;
+  InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) override;
 
  protected:
-	clang::ASTContext& context;
+  clang::ASTContext &context;
 };
-}	// namespace ConstructTraitInterface
-}	// namespace Tooling
-}	// namespace Clang
-}	// namespace InstRO
+}  // namespace ConstructTraitInterface
+}  // namespace Tooling
+}  // namespace Clang
+}  // namespace InstRO
 
-#endif	// INSTRO_CLANG_TOOLING_CLANG_CONSTRUCT_CLASS_INTERFACE_H
+#endif  // INSTRO_CLANG_TOOLING_CLANG_CONSTRUCT_CLASS_INTERFACE_H

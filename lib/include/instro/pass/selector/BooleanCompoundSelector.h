@@ -13,17 +13,17 @@ namespace Selector {
  */
 class BooleanCompoundSelector : public InstRO::Core::PassImplementation {
  public:
-	enum CompoundOperationType { CO_OR, CO_AND, CO_XOR, CO_MINUS };
+  enum CompoundOperationType { CO_OR, CO_AND, CO_XOR, CO_MINUS };
 
-	BooleanCompoundSelector(CompoundOperationType operationType) : operationType(operationType) {}
+  BooleanCompoundSelector(CompoundOperationType operationType) : operationType(operationType) {}
 
-	void execute() override;
+  void execute() override;
 
  private:
-	enum CompoundOperationType operationType;
+  enum CompoundOperationType operationType;
 };
 
-}	// namespace Selector
-}	// namespace InstRO
+}  // namespace Selector
+}  // namespace InstRO
 
-#endif	// INSTRO_CORE_BOOLEANCOMPOUNDSELECTOR_H
+#endif  // INSTRO_CORE_BOOLEANCOMPOUNDSELECTOR_H

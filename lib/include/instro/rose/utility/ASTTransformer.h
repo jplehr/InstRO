@@ -18,22 +18,22 @@ namespace ASTTransformation {
  */
 class HeaderIncludeHelper {
  public:
-	static HeaderIncludeHelper &getInstance() {
-		static HeaderIncludeHelper instance;
-		return instance;
-	}
+  static HeaderIncludeHelper &getInstance() {
+    static HeaderIncludeHelper instance;
+    return instance;
+  }
 
-	bool insertHeaderIfSource(std::string headerName, SgLocatedNode *node);
+  bool insertHeaderIfSource(std::string headerName, SgLocatedNode *node);
 
  private:
-	HeaderIncludeHelper() {}
-	HeaderIncludeHelper(const HeaderIncludeHelper &o) = delete;
-	std::map<std::string, std::set<SgSourceFile *> > alreadyIncludedMap;
+  HeaderIncludeHelper() {}
+  HeaderIncludeHelper(const HeaderIncludeHelper &o) = delete;
+  std::map<std::string, std::set<SgSourceFile *>> alreadyIncludedMap;
 };
 
-}	// ASTTransformer
-}	// Utility
-}	// Rose
-}	// InstRO
+}  // namespace ASTTransformation
+}  // namespace Utility
+}  // namespace Rose
+}  // namespace InstRO
 
 #endif

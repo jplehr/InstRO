@@ -14,20 +14,20 @@ namespace Clang {
 namespace Support {
 class ClangConsumerFactory : public clang::ASTFrontendAction {
  public:
-	ClangConsumerFactory() = delete;
-	ClangConsumerFactory(const ClangConsumerFactory& other) = delete;
-	ClangConsumerFactory(InstRO::PassManagement::PassManager* manager, clang::tooling::Replacements& replacements,
-											 InstRO::Clang::ClangPassFactory* fac);
-	~ClangConsumerFactory();
-	std::unique_ptr<clang::ASTConsumer> newASTConsumer();
-	std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance& ci, llvm::StringRef strRef);
+  ClangConsumerFactory() = delete;
+  ClangConsumerFactory(const ClangConsumerFactory &other) = delete;
+  ClangConsumerFactory(InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &replacements,
+                       InstRO::Clang::ClangPassFactory *fac);
+  ~ClangConsumerFactory();
+  std::unique_ptr<clang::ASTConsumer> newASTConsumer();
+  std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(clang::CompilerInstance &ci, llvm::StringRef strRef);
 
  private:
-	InstRO::PassManagement::PassManager* manager;
-	clang::tooling::Replacements& replacements;
-	InstRO::Clang::ClangPassFactory* factory;
+  InstRO::PassManagement::PassManager *manager;
+  clang::tooling::Replacements &replacements;
+  InstRO::Clang::ClangPassFactory *factory;
 };
-}	// namespace Support
-}	// namespace Clang
-}	// namespace InstRO
+}  // namespace Support
+}  // namespace Clang
+}  // namespace InstRO
 #endif

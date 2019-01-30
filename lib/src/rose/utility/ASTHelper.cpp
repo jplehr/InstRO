@@ -6,32 +6,32 @@ using namespace InstRO::Rose::Utility;
  * \brief Shortcut to get the defining declaration of a given declaration
  * \param oldDecl a possibly non-defining declaration
  */
-SgFunctionDeclaration* ASTHelper::getDefiningDeclaration(SgFunctionDeclaration* oldDecl) {
-	SgDeclarationStatement* definingDecl = oldDecl->get_definingDeclaration();
+SgFunctionDeclaration *ASTHelper::getDefiningDeclaration(SgFunctionDeclaration *oldDecl) {
+  SgDeclarationStatement *definingDecl = oldDecl->get_definingDeclaration();
 
-	return isSgFunctionDeclaration(definingDecl);
+  return isSgFunctionDeclaration(definingDecl);
 }
 
 /**
  * \brief Shortcut to get the first non-defining declaration of a given declaration
  * \param oldDecl a possibly defining declaration
  */
-SgFunctionDeclaration* ASTHelper::getFirstNondefDeclaration(SgFunctionDeclaration* oldDecl) {
-	SgDeclarationStatement* nondefDecl = oldDecl->get_firstNondefiningDeclaration();
+SgFunctionDeclaration *ASTHelper::getFirstNondefDeclaration(SgFunctionDeclaration *oldDecl) {
+  SgDeclarationStatement *nondefDecl = oldDecl->get_firstNondefiningDeclaration();
 
-	return isSgFunctionDeclaration(nondefDecl);
+  return isSgFunctionDeclaration(nondefDecl);
 }
 
-SgFunctionDeclaration* ASTHelper::getDefiningDeclaration(SgFunctionDefinition* oldDef) {
-	SgFunctionDeclaration* funcDecl = oldDef->get_declaration();
+SgFunctionDeclaration *ASTHelper::getDefiningDeclaration(SgFunctionDefinition *oldDef) {
+  SgFunctionDeclaration *funcDecl = oldDef->get_declaration();
 
-	return getDefiningDeclaration(funcDecl);
+  return getDefiningDeclaration(funcDecl);
 }
 
-SgFunctionDeclaration* ASTHelper::getFirstNondefDeclaration(SgFunctionDefinition* oldDef) {
-	SgFunctionDeclaration* funcDecl = oldDef->get_declaration();
+SgFunctionDeclaration *ASTHelper::getFirstNondefDeclaration(SgFunctionDefinition *oldDef) {
+  SgFunctionDeclaration *funcDecl = oldDef->get_declaration();
 
-	return getFirstNondefDeclaration(funcDecl);
+  return getFirstNondefDeclaration(funcDecl);
 }
 
 /**
@@ -42,65 +42,65 @@ SgFunctionDeclaration* ASTHelper::getFirstNondefDeclaration(SgFunctionDefinition
  *	XXX JP 2014-03: No. If it is a template function the call to getAssocitatedFunctionDeclaration() will return NULL
  *			It might be possible to get around this using the symbol table but I cant remember at the moment.
  */
-SgFunctionDefinition* ASTHelper::getFunctionDefinition(SgFunctionCallExp* callExp) {
-	SgFunctionDeclaration* funcDecl = callExp->getAssociatedFunctionDeclaration();
+SgFunctionDefinition *ASTHelper::getFunctionDefinition(SgFunctionCallExp *callExp) {
+  SgFunctionDeclaration *funcDecl = callExp->getAssociatedFunctionDeclaration();
 
-	if (!funcDecl) {
-		std::cout << "Cannot get associated declaration of function call: " << callExp->unparseToString() << std::endl;
-		return NULL;
-	}
+  if (!funcDecl) {
+    std::cout << "Cannot get associated declaration of function call: " << callExp->unparseToString() << std::endl;
+    return NULL;
+  }
 
-	SgFunctionDeclaration* fDefDecl = ASTHelper::getDefiningDeclaration(funcDecl);
-	if (fDefDecl == NULL)
-		return NULL;
-	SgFunctionDefinition* funcDef = fDefDecl->get_definition();
+  SgFunctionDeclaration *fDefDecl = ASTHelper::getDefiningDeclaration(funcDecl);
+  if (fDefDecl == NULL)
+    return NULL;
+  SgFunctionDefinition *funcDef = fDefDecl->get_definition();
 
-	if (!funcDef) {
-		std::cout << "Cannot get FuncDef of declaration:" << funcDecl->unparseToString() << std::endl;
-	}
+  if (!funcDef) {
+    std::cout << "Cannot get FuncDef of declaration:" << funcDecl->unparseToString() << std::endl;
+  }
 
-	return funcDef;
+  return funcDef;
 }
 
 /**
  * \brief Returns the loop nesting level of a statement
  * \param n A node of the AST
  */
-int ASTHelper::getLoopNestingLevel(SgLocatedNode* n) {
-	int nestingCount = 0;
-	SgScopeStatement* enclosingLoop = getEnclosingLoop(n);
+int ASTHelper::getLoopNestingLevel(SgLocatedNode *n) {
+  int nestingCount = 0;
+  SgScopeStatement *enclosingLoop = getEnclosingLoop(n);
 
-	while (enclosingLoop) {
-		nestingCount++;
-		enclosingLoop = getEnclosingLoop(enclosingLoop);
-	}
-	return nestingCount;
+  while (enclosingLoop) {
+    nestingCount++;
+    enclosingLoop = getEnclosingLoop(enclosingLoop);
+  }
+  return nestingCount;
 }
 
-std::string ASTHelper::nondefUnparseToString(SgFunctionDeclaration* funcDecl) {
-	return ASTHelper::getFirstNondefDeclaration(funcDecl)->unparseToString();
+std::string ASTHelper::nondefUnparseToString(SgFunctionDeclaration *funcDecl) {
+  return ASTHelper::getFirstNondefDeclaration(funcDecl)->unparseToString();
 }
 
-std::string ASTHelper::nondefUnparseToString(SgFunctionDefinition* funcDef) {
-	return ASTHelper::nondefUnparseToString(funcDef->get_declaration());
+std::string ASTHelper::nondefUnparseToString(SgFunctionDefinition *funcDef) {
+  return ASTHelper::nondefUnparseToString(funcDef->get_declaration());
 }
 
 /**
  * \brief Returns enclosing loop of a node
  * \param n A node of the AST
  */
-SgScopeStatement* ASTHelper::getEnclosingLoop(SgLocatedNode* n) {
-	SgScopeStatement* enclosingScope = SageInterface::getEnclosingNode<SgScopeStatement>(n, false);
+SgScopeStatement *ASTHelper::getEnclosingLoop(SgLocatedNode *n) {
+  SgScopeStatement *enclosingScope = SageInterface::getEnclosingNode<SgScopeStatement>(n, false);
 
-	if (isLoop(enclosingScope)) {
-		return enclosingScope;
+  if (isLoop(enclosingScope)) {
+    return enclosingScope;
 
-	} else if (isSgGlobal(enclosingScope)) {
-		return NULL;	// reached global scope
+  } else if (isSgGlobal(enclosingScope)) {
+    return NULL;  // reached global scope
 
-	} else {
-		return getEnclosingLoop(enclosingScope);
-	}
+  } else {
+    return getEnclosingLoop(enclosingScope);
+  }
 }
 
 /**
@@ -108,67 +108,66 @@ SgScopeStatement* ASTHelper::getEnclosingLoop(SgLocatedNode* n) {
  * Possible loop statements in C++ are: For, While, Do-While
  * \param n A node of the AST
  */
-bool ASTHelper::isLoop(SgScopeStatement* scope) {
-	return isSgForStatement(scope) || isSgWhileStmt(scope) || isSgDoWhileStmt(scope);
+bool ASTHelper::isLoop(SgScopeStatement *scope) {
+  return isSgForStatement(scope) || isSgWhileStmt(scope) || isSgDoWhileStmt(scope);
 }
 
-bool ASTHelper::isConstructor(SgFunctionDefinition* fDef) { return isConstructor(fDef->get_declaration()); }
-bool ASTHelper::isConstructor(SgFunctionDeclaration* fDecl) {
-	return fDecl->get_specialFunctionModifier().isConstructor();
+bool ASTHelper::isConstructor(SgFunctionDefinition *fDef) { return isConstructor(fDef->get_declaration()); }
+bool ASTHelper::isConstructor(SgFunctionDeclaration *fDecl) {
+  return fDecl->get_specialFunctionModifier().isConstructor();
 }
 
-bool ASTHelper::isDestructor(SgFunctionDefinition* fDef) { return isDestructor(fDef->get_declaration()); }
-bool ASTHelper::isDestructor(SgFunctionDeclaration* fDecl) {
-	return fDecl->get_specialFunctionModifier().isDestructor();
+bool ASTHelper::isDestructor(SgFunctionDefinition *fDef) { return isDestructor(fDef->get_declaration()); }
+bool ASTHelper::isDestructor(SgFunctionDeclaration *fDecl) {
+  return fDecl->get_specialFunctionModifier().isDestructor();
 }
 
 /** \brief Returns the corresponding function signature like "foo(int,float*)" */
-std::string ASTHelper::getFunctionSignature(SgFunctionDefinition* funcDef) {
-	if (funcDef == nullptr) {
-		std::cout << "getFunctionSignature: funcDef was null" << std::endl;
-		return "null";
-	}
+std::string ASTHelper::getFunctionSignature(SgFunctionDefinition *funcDef) {
+  if (funcDef == nullptr) {
+    std::cout << "getFunctionSignature: funcDef was null" << std::endl;
+    return "null";
+  }
 
-	SgFunctionDeclaration* funcDecl = funcDef->get_declaration();
+  SgFunctionDeclaration *funcDecl = funcDef->get_declaration();
 
-	SgInitializedNamePtrList params = funcDecl->get_parameterList()->get_args();
+  SgInitializedNamePtrList params = funcDecl->get_parameterList()->get_args();
 
-	std::stringstream ss;
-	ss << funcDecl->get_qualified_name().getString() << "(";
+  std::stringstream ss;
+  ss << funcDecl->get_qualified_name().getString() << "(";
 
-	for (int i = 0; i < params.size(); i++) {
-		if (i != 0) {
-			ss << ",";
-		}
-		ss << params[i]->get_type()->unparseToString();
-	}
-	ss << ")";
+  for (int i = 0; i < params.size(); i++) {
+    if (i != 0) {
+      ss << ",";
+    }
+    ss << params[i]->get_type()->unparseToString();
+  }
+  ss << ")";
 
-	return ss.str();
+  return ss.str();
 }
 
-bool ASTHelper::voidFunctionEndsWithoutReturn(SgFunctionDefinition* fDef) {
-	auto fDec = fDef->get_declaration();
-	auto fType = fDec->get_type();
-	return isSgTypeVoid(fType->get_return_type()) != nullptr;
+bool ASTHelper::voidFunctionEndsWithoutReturn(SgFunctionDefinition *fDef) {
+  auto fDec = fDef->get_declaration();
+  auto fType = fDec->get_type();
+  return isSgTypeVoid(fType->get_return_type()) != nullptr;
 }
 
-bool ASTHelper::isContainedInTemplateInstantiation(SgNode* node) {
-	SgTemplateInstantiationFunctionDecl* templFuncDecl =
-			SageInterface::getEnclosingNode<SgTemplateInstantiationFunctionDecl>(node, true);
-	SgTemplateInstantiationMemberFunctionDecl* templMemFuncDecl =
-			SageInterface::getEnclosingNode<SgTemplateInstantiationMemberFunctionDecl>(node, true);
+bool ASTHelper::isContainedInTemplateInstantiation(SgNode *node) {
+  SgTemplateInstantiationFunctionDecl *templFuncDecl =
+      SageInterface::getEnclosingNode<SgTemplateInstantiationFunctionDecl>(node, true);
+  SgTemplateInstantiationMemberFunctionDecl *templMemFuncDecl =
+      SageInterface::getEnclosingNode<SgTemplateInstantiationMemberFunctionDecl>(node, true);
 
-	return (templFuncDecl != nullptr) || (templMemFuncDecl != nullptr);
+  return (templFuncDecl != nullptr) || (templMemFuncDecl != nullptr);
 }
 
-Sg_File_Info *ASTHelper::getFileInfoFromWhileOrIf(SgNode *n){
-		if (isSgIfStmt(n)) {
-			return isSgIfStmt(n)->get_startOfConstruct();
-		}
-		if (isSgWhileStmt(n)) {
-			return isSgWhileStmt(n)->get_startOfConstruct();
-		}
-	return nullptr;
+Sg_File_Info *ASTHelper::getFileInfoFromWhileOrIf(SgNode *n) {
+  if (isSgIfStmt(n)) {
+    return isSgIfStmt(n)->get_startOfConstruct();
+  }
+  if (isSgWhileStmt(n)) {
+    return isSgWhileStmt(n)->get_startOfConstruct();
+  }
+  return nullptr;
 }
-

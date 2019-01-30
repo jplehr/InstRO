@@ -9,18 +9,18 @@ namespace InstRO {
 namespace Selector {
 
 void ConstructRaisingElevator::execute() {
-	auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-	outputSet = constructElevator->raise(getInput(0), targetLevel);
+  auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
+  outputSet = constructElevator->raise(getInput(0), targetLevel);
 }
 
 void ConstructLoweringElevator::execute() {
-	auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-	outputSet = constructElevator->lower(getInput(0), targetLevel);
+  auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
+  outputSet = constructElevator->lower(getInput(0), targetLevel);
 }
 
 void ConstructCroppingElevator::execute() {
-	auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
-	outputSet = constructElevator->crop(getInput(0), targetLevel, maxLevel);	// targetLevel is minLevel
+  auto constructElevator = InstRO::getInstrumentorInstance()->getAnalysisManager()->getCSElevator();
+  outputSet = constructElevator->crop(getInput(0), targetLevel, maxLevel);  // targetLevel is minLevel
 }
-}	// namespace Selector
-}	// namespace InstRO
+}  // namespace Selector
+}  // namespace InstRO

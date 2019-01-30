@@ -19,12 +19,12 @@ namespace NamedConstructAccess {
  */
 class Matcher {
  public:
-	Matcher(){};
-	virtual ~Matcher() {}
+  Matcher(){};
+  virtual ~Matcher() {}
 
-	virtual bool isMatch(std::string candidate, std::string pattern) = 0;
+  virtual bool isMatch(std::string candidate, std::string pattern) = 0;
 
-	virtual bool isMatch(std::string candidate) = 0;
+  virtual bool isMatch(std::string candidate) = 0;
 };
 
 /**
@@ -35,24 +35,24 @@ class Matcher {
  */
 class WildcardedStringMatcher : public Matcher {
  public:
-	/** Initializes the wild card char to # */
-	WildcardedStringMatcher() : WILDCARDCHAR('#') {}
+  /** Initializes the wild card char to # */
+  WildcardedStringMatcher() : WILDCARDCHAR('#') {}
 
-	/** Initializes wild card char to '#' and used patterns-list with patternList */
-	WildcardedStringMatcher(std::vector<std::string> patternList) : patterns(patternList), WILDCARDCHAR('#') {}
+  /** Initializes wild card char to '#' and used patterns-list with patternList */
+  WildcardedStringMatcher(std::vector<std::string> patternList) : patterns(patternList), WILDCARDCHAR('#') {}
 
-	/** Checks candidate against pattern */
-	virtual bool isMatch(std::string candidate, std::string pattern) override;
+  /** Checks candidate against pattern */
+  virtual bool isMatch(std::string candidate, std::string pattern) override;
 
-	/** Checks the candidate against all patterns, short-circuits on first match */
-	virtual bool isMatch(std::string candidate) override;
+  /** Checks the candidate against all patterns, short-circuits on first match */
+  virtual bool isMatch(std::string candidate) override;
 
  protected:
-	bool bMatch(std::string str, std::string pattern);
+  bool bMatch(std::string str, std::string pattern);
 
  private:
-	std::vector<std::string> patterns;
-	const char WILDCARDCHAR;	// The used wild card character
+  std::vector<std::string> patterns;
+  const char WILDCARDCHAR;  // The used wild card character
 };
 
 /**
@@ -60,23 +60,23 @@ class WildcardedStringMatcher : public Matcher {
  */
 class NamedConstructAccess {
  public:
-	virtual ~NamedConstructAccess() {}
+  virtual ~NamedConstructAccess() {}
 
-	// a) any userdefined symbols, e.g. variable names, function / method names, labels
-	virtual InstRO::Core::ConstructSet getConstructsByIdentifierName(Matcher&) = 0;
+  // a) any userdefined symbols, e.g. variable names, function / method names, labels
+  virtual InstRO::Core::ConstructSet getConstructsByIdentifierName(Matcher &) = 0;
 
-	// b) + contents of strings and comments
-	virtual InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(Matcher&) {
-		throw std::string("NamedConstructAccess::getConstructsByUserTextStringMatch() is not implemented.");
-	}
+  // b) + contents of strings and comments
+  virtual InstRO::Core::ConstructSet getConstructsByUserTextStringMatch(Matcher &) {
+    throw std::string("NamedConstructAccess::getConstructsByUserTextStringMatch() is not implemented.");
+  }
 
-	// c) raw source code
-	virtual InstRO::Core::ConstructSet getConstructsByCodeMatch(Matcher&) {
-		throw std::string("NamedConstructAccess::getConstructsByCodeMatch() is not implemented.");
-	}
+  // c) raw source code
+  virtual InstRO::Core::ConstructSet getConstructsByCodeMatch(Matcher &) {
+    throw std::string("NamedConstructAccess::getConstructsByCodeMatch() is not implemented.");
+  }
 };
-}	// namespace NamedConstructAccess
-}	// namespace Tooling
-}	// namespace InstRO
+}  // namespace NamedConstructAccess
+}  // namespace Tooling
+}  // namespace InstRO
 
 #endif

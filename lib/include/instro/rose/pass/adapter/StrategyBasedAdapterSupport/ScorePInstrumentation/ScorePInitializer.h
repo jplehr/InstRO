@@ -4,24 +4,25 @@
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ToolInitializer.h"
 
 namespace InstRO {
-	namespace Rose {
-		namespace Adapter {
-			namespace StrategyBasedAdapterSupport{
+namespace Rose {
+namespace Adapter {
+namespace StrategyBasedAdapterSupport {
 
-	/**
-	 * \brief ScoreP tool initialization
-	 *
-	 * \author Matthias Zoellner
-	 */
-	class ScorePInitializer : public ToolInitializer {
-	public:
+/**
+ * \brief ScoreP tool initialization
+ *
+ * \author Matthias Zoellner
+ */
+class ScorePInitializer : public ToolInitializer {
+ public:
+  /** Include the tool headers to the provided file */
+  void includeToolHeadersToFile(SgFile *file);
 
-		/** Include the tool headers to the provided file */
-		void includeToolHeadersToFile(SgFile* file);
+};  // class ScorePInitializer
 
-	}; // class ScorePInitializer
+}  // namespace StrategyBasedAdapterSupport
+}  // namespace Adapter
+}  // namespace Rose
+}  // namespace InstRO
 
-}}}} // namespace InstRO
-
-#endif // SCORE_P_INITIALIZER_H__
-
+#endif  // SCORE_P_INITIALIZER_H__

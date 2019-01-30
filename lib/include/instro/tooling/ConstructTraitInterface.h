@@ -9,12 +9,12 @@ namespace ConstructTraitInterface {
 
 class ConstructTraitInterface {
  public:
-	virtual ~ConstructTraitInterface() {}
+  virtual ~ConstructTraitInterface() {}
 
-	virtual InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) = 0;
+  virtual InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) = 0;
 };
 
-}	// namespace ConstructTraitInterface
-}	// namespace Tooling
-}	// namespace InstRO
+}  // namespace ConstructTraitInterface
+}  // namespace Tooling
+}  // namespace InstRO
 #endif

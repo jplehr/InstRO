@@ -17,26 +17,27 @@ namespace Support {
  */
 class RoseCodeWrapper {
  public:
-	RoseCodeWrapper(SgProject* project) : project(project) {}
+  RoseCodeWrapper(SgProject *project) : project(project) {}
 
-	void wrapStatement(SgStatement* stmt, std::string postfix, size_t id);
-	void wrapExpression(SgExpression* expr, size_t id);
-	void instrumentFunction(SgFunctionDefinition* function, size_t id);
-	void instrumentScope(SgScopeStatement* scope, size_t id);
+  void wrapStatement(SgStatement *stmt, std::string postfix, size_t id);
+  void wrapExpression(SgExpression *expr, size_t id);
+  void instrumentFunction(SgFunctionDefinition *function, size_t id);
+  void instrumentScope(SgScopeStatement *scope, size_t id);
 
  private:
-	SgProject* project;
+  SgProject *project;
 
-	void handleRelevantExits(SgScopeStatement* scope, SgStatement* instrumentStmt);
-	void instrumentReturnStmt(SgScopeStatement* scope, SgReturnStmt* returnStmt, SgStatement* instrumentStmt);
+  void handleRelevantExits(SgScopeStatement *scope, SgStatement *instrumentStmt);
+  void instrumentReturnStmt(SgScopeStatement *scope, SgReturnStmt *returnStmt, SgStatement *instrumentStmt);
 
-	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, SgExprListExp* parameters);
-	SgStatement* buildCallExpressionStatement(SgScopeStatement* context, std::string functionName, size_t id);
+  SgStatement *buildCallExpressionStatement(SgScopeStatement *context, std::string functionName,
+                                            SgExprListExp *parameters);
+  SgStatement *buildCallExpressionStatement(SgScopeStatement *context, std::string functionName, size_t id);
 };
 
-}	// namespace Support
-}	// namespace Adapter
-}	// namespace Rose
-}	// namespace InstRO
+}  // namespace Support
+}  // namespace Adapter
+}  // namespace Rose
+}  // namespace InstRO
 
 #endif /* INSTRO_ROSE_PASS_ADAPTER_SUPPORT_ROSECODEWRAPPER_H_ */

@@ -16,21 +16,21 @@ namespace Adapter {
  */
 class RoseScorepRegionInstrumentationAdapter : public Support::RosePostOrderInstrumentationAdapter {
  public:
-	RoseScorepRegionInstrumentationAdapter(SgProject *p) : RosePostOrderInstrumentationAdapter(p), wrapper(p) {}
+  RoseScorepRegionInstrumentationAdapter(SgProject *p) : RosePostOrderInstrumentationAdapter(p), wrapper(p) {}
 
  protected:
-	void instrumentFunction(const std::shared_ptr<InstRO::Core::Construct> construct) override;
-	void instrumentLoop(const std::shared_ptr<InstRO::Core::Construct> construct) override;
-	void instrumentConditional(const std::shared_ptr<InstRO::Core::Construct> construct) override;
-	void instrumentScope(const std::shared_ptr<InstRO::Core::Construct> construct) override;
-	void instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct) override;
-	void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+  void instrumentFunction(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+  void instrumentLoop(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+  void instrumentConditional(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+  void instrumentScope(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+  void instrumentStatement(const std::shared_ptr<InstRO::Core::Construct> construct) override;
+  void instrumentExpression(const std::shared_ptr<InstRO::Core::Construct> construct) override;
 
  private:
-	Support::RoseScorepCodeWrapper wrapper;
+  Support::RoseScorepCodeWrapper wrapper;
 };
-}
-}
-}
+}  // namespace Adapter
+}  // namespace Rose
+}  // namespace InstRO
 
 #endif

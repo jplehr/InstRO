@@ -14,17 +14,17 @@ namespace ConstructTraitInterface {
 
 class RoseConstructTraitInterface : public InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface {
  protected:
-	SgProject *proj;
+  SgProject *proj;
 
  public:
-	RoseConstructTraitInterface() = delete;
-	RoseConstructTraitInterface(SgProject *projArg) : proj(projArg) {}
+  RoseConstructTraitInterface() = delete;
+  RoseConstructTraitInterface(SgProject *projArg) : proj(projArg) {}
 
-	InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) override;
+  InstRO::Core::ConstructSet getConstructsByTrait(const InstRO::Core::ConstructTraitType constructTrait) override;
 };
-}
-}
-}
-}
+}  // namespace ConstructTraitInterface
+}  // namespace Tooling
+}  // namespace Rose
+}  // namespace InstRO
 
 #endif

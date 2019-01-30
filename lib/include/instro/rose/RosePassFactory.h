@@ -14,36 +14,36 @@ namespace Rose {
 
 class RosePassFactory : public InstRO::PassFactory {
  public:
-	RosePassFactory(PassManagement::PassManager* refManager, SgProject* proj) : PassFactory(refManager), project(proj) {}
+  RosePassFactory(PassManagement::PassManager *refManager, SgProject *proj) : PassFactory(refManager), project(proj) {}
 
  private:
-	SgProject* project;
+  SgProject *project;
 
  public:
-	Pass* createDefaultInstrumentationAdapter(InstRO::Pass* input);
+  Pass *createDefaultInstrumentationAdapter(InstRO::Pass *input);
 
-	/* ROSE ONLY */
+  /* ROSE ONLY */
 
-	InstRO::Pass* createScorepRegionInstrumentationAdapter(InstRO::Pass *input);
+  InstRO::Pass *createScorepRegionInstrumentationAdapter(InstRO::Pass *input);
 
-	// RoseUniqueCallpathTransformer
-	InstRO::Pass* createRoseUniqueCallpathTransformer(Pass* input);
-	InstRO::Pass* createRoseUniqueCallpathTransformer(Pass* input, Pass* root, Pass* active);
+  // RoseUniqueCallpathTransformer
+  InstRO::Pass *createRoseUniqueCallpathTransformer(Pass *input);
+  InstRO::Pass *createRoseUniqueCallpathTransformer(Pass *input, Pass *root, Pass *active);
 
-	// RoseFunctionWrapper
-	InstRO::Pass* createRoseFunctionWrapper(
-			InstRO::Pass* input, InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer);
-	InstRO::Pass* createRoseFunctionWrapper(
-			InstRO::Pass* input, InstRO::Pass* renaming,
-			InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer,
-			const std::string& definitionPrefix, const std::string& wrapperPrefix);
-	InstRO::Pass* createRoseMPIFunctionWrapper(InstRO::Pass* input);
-	InstRO::Pass* createRoseMPIFunctionWrapper(InstRO::Pass* input, InstRO::Pass* renaming,
-																						 const std::string& definitionPrefix, const std::string& wrapperPrefix);
+  // RoseFunctionWrapper
+  InstRO::Pass *createRoseFunctionWrapper(
+      InstRO::Pass *input, InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer);
+  InstRO::Pass *createRoseFunctionWrapper(
+      InstRO::Pass *input, InstRO::Pass *renaming,
+      InstRO::Rose::Transformer::RoseFunctionWrapper::NameTransformer nameTransformer,
+      const std::string &definitionPrefix, const std::string &wrapperPrefix);
+  InstRO::Pass *createRoseMPIFunctionWrapper(InstRO::Pass *input);
+  InstRO::Pass *createRoseMPIFunctionWrapper(InstRO::Pass *input, InstRO::Pass *renaming,
+                                             const std::string &definitionPrefix, const std::string &wrapperPrefix);
 
-	InstRO::Pass* createRoseMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass* pass);
+  InstRO::Pass *createRoseMatthiasZoellnerLoopInstrumentationAdapter(InstRO::Pass *pass);
 };
-}	// namespace Rose
-}	// namespace InstRO
+}  // namespace Rose
+}  // namespace InstRO
 
 #endif

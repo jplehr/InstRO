@@ -8,6 +8,6 @@ namespace Clang {
 namespace Support {
 clang::tooling::Replacements mergeToolReplacements(clang::tooling::RefactoringTool &);
 }
-}	// namespace Clang
-}	// namespace InstRO
+}  // namespace Clang
+}  // namespace InstRO
 #endif

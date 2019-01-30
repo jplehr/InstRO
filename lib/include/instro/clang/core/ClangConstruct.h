@@ -10,7 +10,7 @@ namespace InstRO {
 namespace Clang {
 
 namespace Support {
-class InstROASTConsumer;	// forward declaration
+class InstROASTConsumer;  // forward declaration
 }
 
 namespace Core {
@@ -19,8 +19,8 @@ namespace Core {
  * @brief The kind of node a ClangConstruct represents.
  */
 enum class ConstructKind {
-	CK_Declaration = 1,
-	CK_Stmt = 2,
+  CK_Declaration = 1,
+  CK_Stmt = 2,
 };
 
 /**
@@ -49,45 +49,45 @@ enum class ConstructKind {
  *instantiated type. In contrast to ROSE, these copies retain the source location of the original.
  */
 class ClangConstruct : public InstRO::Core::Construct {
-	friend class Support::InstROASTConsumer;	// calls setASTContext
+  friend class Support::InstROASTConsumer;  // calls setASTContext
 
  public:
-	ClangConstruct(clang::Decl* decl);
-	ClangConstruct(clang::Stmt* stmt);
+  ClangConstruct(clang::Decl *decl);
+  ClangConstruct(clang::Stmt *stmt);
 
-	size_t getID() const override;
-	std::string getIdentifier() const override;
+  size_t getID() const override;
+  std::string getIdentifier() const override;
 
-	std::string toString() const override;
-	std::string toDotString() const override;
+  std::string toString() const override;
+  std::string toDotString() const override;
 
-	/**
-	 * @brief Retrieves the declaration represented by this construct.
-	 * @return \c nullptr if no declaration is associated with this construct
-	 */
-	clang::Decl* getAsDecl() const;
-	/**
-	 * @brief Retrieves the statement represented by this construct.
-	 * @note In the Clang AST each expression is also a statement.
-	 * @return \c nullptr if no statement is associated with this construct
-	 */
-	clang::Stmt* getAsStmt() const;
+  /**
+   * @brief Retrieves the declaration represented by this construct.
+   * @return \c nullptr if no declaration is associated with this construct
+   */
+  clang::Decl *getAsDecl() const;
+  /**
+   * @brief Retrieves the statement represented by this construct.
+   * @note In the Clang AST each expression is also a statement.
+   * @return \c nullptr if no statement is associated with this construct
+   */
+  clang::Stmt *getAsStmt() const;
 
-	static clang::SourceManager& getSourceManager();
+  static clang::SourceManager &getSourceManager();
 
  private:
-	ConstructKind kind;
-	void* construct;
+  ConstructKind kind;
+  void *construct;
 
-	std::string getFunctionName(clang::FunctionDecl* decl) const;
+  std::string getFunctionName(clang::FunctionDecl *decl) const;
 
-	static clang::ASTContext* astContext;
+  static clang::ASTContext *astContext;
 
-	static clang::ASTContext& getASTContext();
-	static void setASTContext(clang::ASTContext& context);
+  static clang::ASTContext &getASTContext();
+  static void setASTContext(clang::ASTContext &context);
 };
-}	// namespace Core
-}	// namespace Clang
-}	// namespace InstRO
+}  // namespace Core
+}  // namespace Clang
+}  // namespace InstRO
 
-#endif	// INSTRO_CLANG_CORE_CLANGCONSTRUCT_H
+#endif  // INSTRO_CLANG_CORE_CLANGCONSTRUCT_H

@@ -18,12 +18,12 @@ namespace Clang {
  */
 class ASTContextProvider {
  public:
-	void setASTContext(clang::ASTContext* ctx) { context = ctx; }
+  void setASTContext(clang::ASTContext *ctx) { context = ctx; }
 
-	clang::ASTContext* getASTContext() { return context; }
+  clang::ASTContext *getASTContext() { return context; }
 
  protected:
-	clang::ASTContext* context;
+  clang::ASTContext *context;
 };
 
 /*
@@ -33,27 +33,27 @@ class ASTContextProvider {
  */
 template <typename T>
 class ClangPassImplBase : public InstRO::Clang::ASTContextProvider,
-													public InstRO::Core::PassImplementation,
-													public clang::RecursiveASTVisitor<T> {
+                          public InstRO::Core::PassImplementation,
+                          public clang::RecursiveASTVisitor<T> {
  public:
-	ClangPassImplBase(PassExecuter<T>* pexec) : InstRO::Core::PassImplementation(), executer(pexec) {}
-	ClangPassImplBase() = delete;
+  ClangPassImplBase(PassExecuter<T> *pexec) : InstRO::Core::PassImplementation(), executer(pexec) {}
+  ClangPassImplBase() = delete;
 
-	virtual void execute() final override {
-		assert(executer != nullptr);
-		executer->setASTContext(context);
-		executer->execute(static_cast<T*>(this));
-	};
+  virtual void execute() final override {
+    assert(executer != nullptr);
+    executer->setASTContext(context);
+    executer->execute(static_cast<T *>(this));
+  };
 
-	virtual void exec(){};
+  virtual void exec(){};
 
-	bool shouldVisitTemplateInstantiations() const { return true; }
+  bool shouldVisitTemplateInstantiations() const { return true; }
 
-	bool shouldVisitImplicitCode() const { return true; }
+  bool shouldVisitImplicitCode() const { return true; }
 
  protected:
-	std::unique_ptr<PassExecuter<T>> executer;
+  std::unique_ptr<PassExecuter<T>> executer;
 };
-}	// namespace Clang
-}	// namespace InstRO
+}  // namespace Clang
+}  // namespace InstRO
 #endif

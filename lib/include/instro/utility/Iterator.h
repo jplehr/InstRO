@@ -2,10 +2,10 @@
 #define INSTRO_UTILITY_ITERATOR_H
 
 #define OPTIONS_ITERATOR(func, start)                \
-	Utility::OptionsIterator<value_type> func() {      \
-		Utility::OptionsIterator<value_type> it(&start); \
-		return it;                                       \
-	}
+  Utility::OptionsIterator<value_type> func() {      \
+    Utility::OptionsIterator<value_type> it(&start); \
+    return it;                                       \
+  }
 
 namespace InstRO {
 namespace Utility {
@@ -16,19 +16,19 @@ namespace Utility {
  */
 template <typename T>
 class OptionsIterator {
-	T* data;
-	int pos = 0;
+  T *data;
+  int pos = 0;
 
  public:
-	OptionsIterator(T* d) : data(d) {}
-	T operator*() { return static_cast<T>(*(data + pos)); }
-	OptionsIterator<T> operator++() {
-		pos++;
-		return *this;
-	}
-	bool operator!=(const OptionsIterator<T>& o) { return (data + pos) != (o.data + o.pos); }
+  OptionsIterator(T *d) : data(d) {}
+  T operator*() { return static_cast<T>(*(data + pos)); }
+  OptionsIterator<T> operator++() {
+    pos++;
+    return *this;
+  }
+  bool operator!=(const OptionsIterator<T> &o) { return (data + pos) != (o.data + o.pos); }
 };
 
-}	// namespace Utility
-}	// namespace InstRO
+}  // namespace Utility
+}  // namespace InstRO
 #endif

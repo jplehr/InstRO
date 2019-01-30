@@ -12,20 +12,20 @@ namespace InstRO {
 namespace Selector {
 
 void ProgramEntrySelector::execute() {
-	std::vector<std::string> mainString = {std::string("main"), std::string("::main")};
-	InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher mainMatcher(mainString);
+  std::vector<std::string> mainString = {std::string("main"), std::string("::main")};
+  InstRO::Tooling::NamedConstructAccess::WildcardedStringMatcher mainMatcher(mainString);
 
-	auto analysisManager = getInstrumentorInstance()->getAnalysisManager();
+  auto analysisManager = getInstrumentorInstance()->getAnalysisManager();
 
-	InstRO::Core::ConstructSet csByNameMain =
-			analysisManager->getNamedConstructAccessFacility()->getConstructsByIdentifierName(mainMatcher);
+  InstRO::Core::ConstructSet csByNameMain =
+      analysisManager->getNamedConstructAccessFacility()->getConstructsByIdentifierName(mainMatcher);
 
-	auto allFunctions =
-			analysisManager->getConstructTraitInterface()->getConstructsByTrait(InstRO::Core::ConstructTraitType::CTFunction);
+  auto allFunctions =
+      analysisManager->getConstructTraitInterface()->getConstructsByTrait(InstRO::Core::ConstructTraitType::CTFunction);
 
-	// intersect everything called "*main" with all functions
-	outputSet = allFunctions.intersect(csByNameMain);
+  // intersect everything called "*main" with all functions
+  outputSet = allFunctions.intersect(csByNameMain);
 }
 
-}	// namespace Selector
-}	// namespace InstRO
+}  // namespace Selector
+}  // namespace InstRO

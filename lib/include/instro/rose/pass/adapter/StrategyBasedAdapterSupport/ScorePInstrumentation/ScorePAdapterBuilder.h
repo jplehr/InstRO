@@ -1,12 +1,11 @@
 #ifndef INSTRO_ROSE_PASS_ADAPTER_STRATEGYBASEDADAPTER_SCOREPINSTRUMENTATION_SCOREP_ADAPTER_BUILDER_H
 #define INSTRO_ROSE_PASS_ADAPTER_STRATEGYBASEDADAPTER_SCOREPINSTRUMENTATION_SCOREP_ADAPTER_BUILDER_H
 
-
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/GenericAdapterBuilder.h"
 
-#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePStatementWrapperStrategy.h"
-#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePLoopIterationStrategy.h"
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePFunctionScopeStrategy.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePLoopIterationStrategy.h"
+#include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePStatementWrapperStrategy.h"
 
 #include "instro/rose/pass/adapter/StrategyBasedAdapterSupport/ScorePInstrumentation/ScorePInitializer.h"
 #if 0
@@ -44,4 +43,3 @@ namespace InstRO {
 
 #endif
 #endif
-

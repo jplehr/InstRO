@@ -6,8 +6,8 @@
 
 #include "rose.h"
 
-#include <string>
 #include <functional>
+#include <string>
 #include <unordered_set>
 
 namespace InstRO {
@@ -68,114 +68,114 @@ namespace Transformer {
 /// \author Simon Reuß
 class RoseFunctionWrapper : public RosePassImplementation {
  public:
-	/// Alias for the functor type used to generate the name of the function called inside the wrapper.
-	typedef std::function<std::string(const std::string&)> NameTransformer;
+  /// Alias for the functor type used to generate the name of the function called inside the wrapper.
+  typedef std::function<std::string(const std::string &)> NameTransformer;
 
-	/// A NameTransformer which returns its input
-	class IdentityNameTransformer {
-	 public:
-		std::string operator()(const std::string& name);
-	};
+  /// A NameTransformer which returns its input
+  class IdentityNameTransformer {
+   public:
+    std::string operator()(const std::string &name);
+  };
 
-	/// Constructs a new FunctionWrapper instance which generates wrappers that call a function specified by the
-	/// NameTransformer.
-	/// \arg input A pass which specifies the functions for which wrappers are created
-	/// \arg nameTransformer A functor which determines the name of the function which is called in the wrapper depending
-	/// on the name of the original function
-	RoseFunctionWrapper(NameTransformer nameTransformer);
+  /// Constructs a new FunctionWrapper instance which generates wrappers that call a function specified by the
+  /// NameTransformer.
+  /// \arg input A pass which specifies the functions for which wrappers are created
+  /// \arg nameTransformer A functor which determines the name of the function which is called in the wrapper depending
+  /// on the name of the original function
+  RoseFunctionWrapper(NameTransformer nameTransformer);
 
-	/// Constructs a new FunctionWrapper instance which generates wrappers that call a function specified by the
-	/// NameTransformer.
-	/// \arg input A pass which specifies the functions for which wrappers are created
-	/// \arg useRenamingPass Whether a second input pass that specifies the nodes of the AST that get searched for
-	/// function calls that are to be renamed is available
-	/// \arg nameTransformer A functor which determines the name of the function which is called in the wrapper depending
-	/// on the name of the original function
-	/// \arg definitionPrefix The original function definition will be renamed according to this prefix
-	/// \arg wrapperPrefix The prefix which gets applied to the name of every generated wrapper
-	RoseFunctionWrapper(NameTransformer nameTransformer, const std::string& definitionPrefix,
-											const std::string& wrapperPrefix, bool useRenamingPass);
+  /// Constructs a new FunctionWrapper instance which generates wrappers that call a function specified by the
+  /// NameTransformer.
+  /// \arg input A pass which specifies the functions for which wrappers are created
+  /// \arg useRenamingPass Whether a second input pass that specifies the nodes of the AST that get searched for
+  /// function calls that are to be renamed is available
+  /// \arg nameTransformer A functor which determines the name of the function which is called in the wrapper depending
+  /// on the name of the original function
+  /// \arg definitionPrefix The original function definition will be renamed according to this prefix
+  /// \arg wrapperPrefix The prefix which gets applied to the name of every generated wrapper
+  RoseFunctionWrapper(NameTransformer nameTransformer, const std::string &definitionPrefix,
+                      const std::string &wrapperPrefix, bool useRenamingPass);
 
-	virtual ~RoseFunctionWrapper();
+  virtual ~RoseFunctionWrapper();
 
-	virtual void init() override;
-	virtual void execute() override;
+  virtual void init() override;
+  virtual void execute() override;
 
-	std::string getDefinitionPrefix() const;
-	void setDefinitionPrefix(const std::string& prefix);
+  std::string getDefinitionPrefix() const;
+  void setDefinitionPrefix(const std::string &prefix);
 
-	std::string getWrapperPrefix() const;
-	void setWrapperPrefix(const std::string& prefix);
+  std::string getWrapperPrefix() const;
+  void setWrapperPrefix(const std::string &prefix);
 
  protected:
-	/// \brief Builds the body of the wrapper.
-	///
-	/// For the default implementation the constructed body consists of an immediate return statement calling the
-	/// specified function. If the return type is \c void, only a function call statement is built.
-	virtual void buildWrapperBody(SgFunctionDeclaration* fDec, SgFunctionDeclaration* wrapperDec,
-																const std::string& functionToCall);
+  /// \brief Builds the body of the wrapper.
+  ///
+  /// For the default implementation the constructed body consists of an immediate return statement calling the
+  /// specified function. If the return type is \c void, only a function call statement is built.
+  virtual void buildWrapperBody(SgFunctionDeclaration *fDec, SgFunctionDeclaration *wrapperDec,
+                                const std::string &functionToCall);
 
-	/// \brief Called once to initialize the global scope of the main function.
-	///
-	/// Subclasses may implement this method to insert all declarations necessary for the wrappers.
-	/// For example, a required header can be inserted. The method is called once prior to the creation of the first
-	/// wrapper and only if the global scope of the main function has been found.
-	///
-	/// \arg scope The global scope of the main function
-	virtual void initMainScope(SgScopeStatement* scope);
+  /// \brief Called once to initialize the global scope of the main function.
+  ///
+  /// Subclasses may implement this method to insert all declarations necessary for the wrappers.
+  /// For example, a required header can be inserted. The method is called once prior to the creation of the first
+  /// wrapper and only if the global scope of the main function has been found.
+  ///
+  /// \arg scope The global scope of the main function
+  virtual void initMainScope(SgScopeStatement *scope);
 
  private:
-	NameTransformer nameTrafo;
-	std::string defPrefix;
-	std::string wrapPrefix;
+  NameTransformer nameTrafo;
+  std::string defPrefix;
+  std::string wrapPrefix;
 
-	SgScopeStatement* mainScope;
+  SgScopeStatement *mainScope;
 
-	bool useRenamingPass;
+  bool useRenamingPass;
 
-	typedef std::unordered_set<SgNode*> RoseNodeSet;
-	typedef std::vector<SgNode*> RoseNodeList;
+  typedef std::unordered_set<SgNode *> RoseNodeSet;
+  typedef std::vector<SgNode *> RoseNodeList;
 
-	RoseNodeSet retrieveNodes(int channel);
+  RoseNodeSet retrieveNodes(int channel);
 
-	void findMainScope();
+  void findMainScope();
 
-	void wrapFunction(SgFunctionDeclaration* node, const RoseNodeList& funCallSearchStartPoints);
+  void wrapFunction(SgFunctionDeclaration *node, const RoseNodeList &funCallSearchStartPoints);
 
-	/// Checks whether the input node is a valid input and maps all input nodes to a common node type for the
-	/// transformation.
-	SgFunctionDeclaration* findInputDeclaration(SgNode* node);
-	/// Queries the renaming selector for all selected nodes and caches them.
-	void cacheRenamingSP();
+  /// Checks whether the input node is a valid input and maps all input nodes to a common node type for the
+  /// transformation.
+  SgFunctionDeclaration *findInputDeclaration(SgNode *node);
+  /// Queries the renaming selector for all selected nodes and caches them.
+  void cacheRenamingSP();
 
-	std::string generatePostfix(SgFunctionDeclaration* fDecl);
+  std::string generatePostfix(SgFunctionDeclaration *fDecl);
 
-	/// Clones the function parameters of the specified declaration.
-	SgFunctionParameterList* cloneFunctionParameterList(const SgFunctionDeclaration* fDec);
+  /// Clones the function parameters of the specified declaration.
+  SgFunctionParameterList *cloneFunctionParameterList(const SgFunctionDeclaration *fDec);
 
-	/// Builds a list of variable references to the specified arguments.
-	SgExprListExp* buildFunctionCallArguments(const SgInitializedNamePtrList* argList);
+  /// Builds a list of variable references to the specified arguments.
+  SgExprListExp *buildFunctionCallArguments(const SgInitializedNamePtrList *argList);
 };
 
 /// \brief RoseFunctionWrapper which wraps MPI functions by calling the corresponding PMPI function inside the wrapper.
 /// \author Simon Reuß
 class RoseMPIFunctionWrapper : public RoseFunctionWrapper {
  public:
-	RoseMPIFunctionWrapper();
-	RoseMPIFunctionWrapper(const std::string& definitionPrefix, const std::string& wrapperPrefix, bool useRenamingPass);
+  RoseMPIFunctionWrapper();
+  RoseMPIFunctionWrapper(const std::string &definitionPrefix, const std::string &wrapperPrefix, bool useRenamingPass);
 
-	/// \brief Functor which transforms MPI function names to their corresponding PMPI name
-	/// by prepending a 'P' to the original name.
-	class PMPINameTransformer {
-	 public:
-		std::string operator()(const std::string& name);
-	};
+  /// \brief Functor which transforms MPI function names to their corresponding PMPI name
+  /// by prepending a 'P' to the original name.
+  class PMPINameTransformer {
+   public:
+    std::string operator()(const std::string &name);
+  };
 
  protected:
-	/// Inserts the MPI header if the typedef \c MPI_Comm cannot be found in the supplied scope.
-	virtual void initMainScope(SgScopeStatement* scope) override;
+  /// Inserts the MPI header if the typedef \c MPI_Comm cannot be found in the supplied scope.
+  virtual void initMainScope(SgScopeStatement *scope) override;
 };
-}
-}
-}
-#endif	// INSTRO_ROSE_ADAPTER_ROSE_FUNCTION_WRAPPER_H
+}  // namespace Transformer
+}  // namespace Rose
+}  // namespace InstRO
+#endif  // INSTRO_ROSE_ADAPTER_ROSE_FUNCTION_WRAPPER_H

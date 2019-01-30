@@ -8,11 +8,11 @@ namespace InstRO {
 namespace Selector {
 
 void ConstructTraitSelector::execute() {
-	InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface* cti =
-			getInstrumentorInstance()->getAnalysisManager()->getConstructTraitInterface();
+  InstRO::Tooling::ConstructTraitInterface::ConstructTraitInterface *cti =
+      getInstrumentorInstance()->getAnalysisManager()->getConstructTraitInterface();
 
-	outputSet = cti->getConstructsByTrait(constructTrait);
+  outputSet = cti->getConstructsByTrait(constructTrait);
 }
 
-}	// namespace Selector
-}	// namespace InstRO
+}  // namespace Selector
+}  // namespace InstRO

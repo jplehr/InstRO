@@ -18,19 +18,19 @@ namespace NamedConstructAccess {}
 
 class AnalysisManager {
  public:
-	virtual ~AnalysisManager() {}
+  virtual ~AnalysisManager() {}
 
-	// CI: Explicit RawPointer to the Class. We do not release ownership
-	virtual ExtendedCallGraph::ExtendedCallGraph* getECG() = 0;
-	// CI:  Explicit RawPointer to the Class. We do not release ownership
-	virtual ControlFlowGraph::ControlFlowGraph* getCFG() = 0;
-	// CI:  Explicit RawPointer to the Class. We do not release ownership
-	virtual ConstructElevator::ConstructElevator* getCSElevator() = 0;
-	// CI:  Explicit RawPointer to the Class. We do not release ownership
-	virtual ConstructTraitInterface::ConstructTraitInterface* getConstructTraitInterface() = 0;
-	// CI:  Explicit RawPointer to the Class. We do not release ownership
-	virtual NamedConstructAccess::NamedConstructAccess* getNamedConstructAccessFacility() = 0;
+  // CI: Explicit RawPointer to the Class. We do not release ownership
+  virtual ExtendedCallGraph::ExtendedCallGraph *getECG() = 0;
+  // CI:  Explicit RawPointer to the Class. We do not release ownership
+  virtual ControlFlowGraph::ControlFlowGraph *getCFG() = 0;
+  // CI:  Explicit RawPointer to the Class. We do not release ownership
+  virtual ConstructElevator::ConstructElevator *getCSElevator() = 0;
+  // CI:  Explicit RawPointer to the Class. We do not release ownership
+  virtual ConstructTraitInterface::ConstructTraitInterface *getConstructTraitInterface() = 0;
+  // CI:  Explicit RawPointer to the Class. We do not release ownership
+  virtual NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() = 0;
 };
-}	// namespace Tooling
-}	// namespace InstRO
+}  // namespace Tooling
+}  // namespace InstRO
 #endif

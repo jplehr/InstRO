@@ -18,21 +18,21 @@ namespace Support {
  */
 class InstROASTConsumer : public clang::ASTConsumer {
  public:
-	/* Pass Manager knows when to run which pass */
-	InstROASTConsumer(InstRO::PassManagement::PassManager* passManager, InstRO::Clang::ClangPassFactory* fac);
+  /* Pass Manager knows when to run which pass */
+  InstROASTConsumer(InstRO::PassManagement::PassManager *passManager, InstRO::Clang::ClangPassFactory *fac);
 
-	/* Gets invoked per Translation Unit. Runs all passes, registered in
-	 * PassManager on the TranslationUnit */
-	void HandleTranslationUnit(clang::ASTContext& context);
+  /* Gets invoked per Translation Unit. Runs all passes, registered in
+   * PassManager on the TranslationUnit */
+  void HandleTranslationUnit(clang::ASTContext &context);
 
  private:
-	// This is a raw pointer, since it is a reference to an entity that is owned
-	// by the Instrumentor
-	InstRO::PassManagement::PassManager* passManager;
-	InstRO::Clang::ClangPassFactory* factory;
+  // This is a raw pointer, since it is a reference to an entity that is owned
+  // by the Instrumentor
+  InstRO::PassManagement::PassManager *passManager;
+  InstRO::Clang::ClangPassFactory *factory;
 };
-}	// namespace Support
-}	// namespace Clang
-}	// namespace InstRO
+}  // namespace Support
+}  // namespace Clang
+}  // namespace InstRO
 
 #endif

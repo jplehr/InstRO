@@ -8,8 +8,8 @@ namespace Rose {
 
 class RosePassImplementation : public InstRO::Core::PassImplementation {
  public:
-	RosePassImplementation() : PassImplementation() {}
+  RosePassImplementation() : PassImplementation() {}
 };
-}
-}
+}  // namespace Rose
+}  // namespace InstRO
 #endif

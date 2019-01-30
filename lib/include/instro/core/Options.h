@@ -15,18 +15,18 @@ namespace Core {
  * XXX This should have a more expressive name.
  */
 struct Options {
-	typedef std::string value_type;
+  typedef std::string value_type;
 #define REGISTER_FIRST_OPTION(OptName, CmdName, DType, Desc) \
-	value_type OptName = #CmdName;                             \
-	OPTIONS_ITERATOR(begin, OptName)
+  value_type OptName = #CmdName;                             \
+  OPTIONS_ITERATOR(begin, OptName)
 
 #define REGISTER_OPTION(OptName, CmdName, DType, Desc) value_type OptName = #CmdName;
 
 #define REGISTER_LAST_OPTION(OptName, CmdName, DType, Desc) \
-	value_type OptName = #CmdName;                            \
-	OPTIONS_ITERATOR(end, ESCAPE(OptName + 1))
+  value_type OptName = #CmdName;                            \
+  OPTIONS_ITERATOR(end, ESCAPE(OptName + 1))
 
-	REGISTER_OPTION_LIST
+  REGISTER_OPTION_LIST
 
 #undef REGISTER_FIRST_OPTION
 #undef REGISTER_OPTION
@@ -46,7 +46,7 @@ struct OptionArguments {
 #define REGISTER_OPTION(OptName, CmdName, DType, Desc) DType OptName;
 #define REGISTER_LAST_OPTION(OptName, CmdName, DType, Desc) DType OptName;
 
-	REGISTER_OPTION_LIST
+  REGISTER_OPTION_LIST
 
 #undef REGISTER_FIRST_OPTION
 #undef REGISTER_OPTION
@@ -54,6 +54,6 @@ struct OptionArguments {
 };
 
 #undef REGISTER_OPTION_LIST
-}	// namespace Core
-}	// namespace InstRO
+}  // namespace Core
+}  // namespace InstRO
 #endif

@@ -9,12 +9,12 @@ namespace InstRO {
 namespace Selector {
 
 void IdentifierMatcherSelector::execute() {
-	Tooling::NamedConstructAccess::NamedConstructAccess* nca =
-			getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
+  Tooling::NamedConstructAccess::NamedConstructAccess *nca =
+      getInstrumentorInstance()->getAnalysisManager()->getNamedConstructAccessFacility();
 
-	Tooling::NamedConstructAccess::WildcardedStringMatcher stringMatcher(rules);
+  Tooling::NamedConstructAccess::WildcardedStringMatcher stringMatcher(rules);
 
-	outputSet = nca->getConstructsByIdentifierName(stringMatcher);
+  outputSet = nca->getConstructsByIdentifierName(stringMatcher);
 }
-}	// namespace Selector
-}	// namespace InstRO
+}  // namespace Selector
+}  // namespace InstRO

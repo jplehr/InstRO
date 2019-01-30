@@ -2,33 +2,33 @@
 
 #include "instro/core/ConstructSet.h"
 
-#include <iomanip>	// setw
+#include <iomanip>  // setw
 #include <iostream>
 
 namespace InstRO {
 namespace Adapter {
 
 void ConstructPrinterAdapter::execute() {
-	InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface cs(getInput(0));
+  InstRO::InfrastructureInterface::ReadOnlyConstructSetCompilerInterface cs(getInput(0));
 
-	auto minLevel = getInput(0)->getMinConstructLevel();
-	auto maxLevel = getInput(0)->getMaxConstructLevel();
+  auto minLevel = getInput(0)->getMinConstructLevel();
+  auto maxLevel = getInput(0)->getMaxConstructLevel();
 
-	std::cout << "=ConstructPrinter= ConstructSet contains " << cs.size() << " constructs";
-	if (!cs.empty()) {
-		std::cout << " | min: " << InstRO::Core::constructLevelToString(minLevel)
-							<< " | max: " << InstRO::Core::constructLevelToString(maxLevel) << std::endl;
-	} else {
-		std::cout << std::endl;
-	}
+  std::cout << "=ConstructPrinter= ConstructSet contains " << cs.size() << " constructs";
+  if (!cs.empty()) {
+    std::cout << " | min: " << InstRO::Core::constructLevelToString(minLevel)
+              << " | max: " << InstRO::Core::constructLevelToString(maxLevel) << std::endl;
+  } else {
+    std::cout << std::endl;
+  }
 
-	unsigned long count = 0;
-	for (auto construct : cs) {
-		std::cout << std::setw(4) << count << ": " << construct->getTraits().toStringShort() << ":  "
-							<< construct->toString() << std::endl;
-		count++;
-	}
+  unsigned long count = 0;
+  for (auto construct : cs) {
+    std::cout << std::setw(4) << count << ": " << construct->getTraits().toStringShort() << ":  "
+              << construct->toString() << std::endl;
+    count++;
+  }
 }
 
-}	// namespace Adapter
-}	// namespace InstRO
+}  // namespace Adapter
+}  // namespace InstRO
