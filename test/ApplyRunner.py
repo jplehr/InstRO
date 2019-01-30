@@ -137,7 +137,7 @@ def runTestBinary(arguments, binary, inputDirectory):
 	if os.path.isdir(binary+'_dir'):
 		shutil.rmtree(binary+'_dir')
 
-	return failedRuns
+	return len(targets), failedRuns
 
 def addLibFolderForClang(build_path):
 	if os.path.isdir(build_path + '/lib/clang'):
@@ -177,6 +177,7 @@ def runApply(arguments):
 
 	pool = Pool()
 	failedRuns = []
+	totalRuns = 0
 	collector = []
 	for b in testPrograms:
 		if os.path.isfile(b):
@@ -188,7 +189,8 @@ def runApply(arguments):
 			failedRuns += [(b, 'not available')]
 
 	for elem in collector:
-		fr = elem.get()
+		tr, fr = elem.get()
+		totalRuns += tr
 		if len(fr) != 0:
 			failedRuns += fr
 
@@ -199,7 +201,7 @@ def runApply(arguments):
 		return 0
 	else:
 		print("\n|=== Tests failed ===")
-		print("|= Number of failing tests due to error: " + str(len(failedRuns)))
+		print("|= Number of failing tests due to error: " + str(len(failedRuns)) + ' of total: ' + str(totalRuns))
 		print("|--- Failing testcases:")
 		print("|---")
 		for fr in failedRuns:
