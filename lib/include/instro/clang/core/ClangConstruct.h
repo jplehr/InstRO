@@ -84,7 +84,7 @@ class ClangConstruct : public InstRO::Core::Construct {
   static clang::ASTContext *astContext;
 
   static clang::ASTContext &getASTContext();
-  static void setASTContext(clang::ASTContext &context);
+  static void setASTContext(clang::ASTContext &context) { ClangConstruct::astContext = &context; }
 };
 }  // namespace Core
 }  // namespace Clang

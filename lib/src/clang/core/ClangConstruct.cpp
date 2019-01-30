@@ -36,10 +36,16 @@ class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVi
   ConstructTrait getConstructTrait() { return ct; }
 
   void VisitFunctionDecl(clang::FunctionDecl *decl) {
+    // Add an option to skip the compiler built-ins?
+    if (decl->isInStdNamespace() || context.getSourceManager().isInSystemHeader(decl->getLocation())) {
+      generateSkipInfo(decl);
+      return;
+    }
+
     if (decl->isThisDeclarationADefinition()) {
       ct = ConstructTrait(ConstructTraitType::CTFunction);
     } else {
-      generateError(decl);
+      generateSkipInfo(decl);
     }
   }
 
@@ -52,7 +58,7 @@ class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVi
       // As of today we do not consider ctors as initializers (which is probably dubious)
       if (llvm::isa<clang::CXXConstructExpr>(decl->getInit())) {
         InstRO::logIt(InstRO::INFO) << "Skipping Constructor initializer" << std::endl;
-        generateError(decl);
+        generateSkipInfo(decl);
         return;
       }
       auto parents = context.getParents(*decl);
@@ -64,10 +70,10 @@ class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVi
         }
       }
     }
-    generateError(decl);
+    generateSkipInfo(decl);
   }
 
-  void VisitDecl(clang::Decl *decl) { generateError(decl); }
+  void VisitDecl(clang::Decl *decl) { generateSkipInfo(decl); }
 
  private:
   clang::ASTContext &context;
@@ -83,7 +89,7 @@ class DeclConstructTraitVisitor : public clang::DeclVisitor<DeclConstructTraitVi
     }
   }
 
-  void generateError(clang::Decl *decl) {
+  void generateSkipInfo(clang::Decl *decl) {
     InstRO::logIt(InstRO::INFO) << "Skipping declaration " << decl->getDeclKindName() << "(" << decl << ")"
                                 << std::endl;
   }
@@ -134,18 +140,18 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
     auto parents = context.getParents(*stmt);
     if (parents.size() == 1) {
       if (parents[0].get<clang::FunctionDecl>() || parents[0].get<clang::SwitchStmt>()) {
-        generateError(stmt);
+        generateSkipInfo(stmt);
       } else {
         ct = ConstructTrait(ConstructTraitType::CTScopeStatement);
         handleStatementWithWrappableCheck(stmt);
       }
     } else {
       InstRO::logIt(InstRO::DEBUG) << "Encountered a compound statement with more than one parent" << std::endl;
-      generateError(stmt);
+      generateSkipInfo(stmt);
     }
   }
 
-  void VisitDeclStmt(clang::DeclStmt *stmt) { generateError(stmt); }
+  void VisitDeclStmt(clang::DeclStmt *stmt) { generateSkipInfo(stmt); }
 
   void VisitExpr(clang::Expr *stmt) {
     // in Clang every Expr is also a Stmt, therefore Expressions might also be SimpleStatements
@@ -171,21 +177,21 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
       finder.match(*stmt, context);
       if (!handler.matched()) {
         InstRO::logIt(InstRO::DEBUG) << "Encountered a boring operator expression" << std::endl;
-        generateError(stmt);
+        generateSkipInfo(stmt);
         return;
       }
 
       if (clang::UnaryOperator *unaryOp = llvm::dyn_cast<clang::UnaryOperator>(stmt)) {
         if (unaryOp->getOpcode() == clang::UO_AddrOf) {
           InstRO::logIt(InstRO::DEBUG) << "Encountered a boring address-of operator" << std::endl;
-          generateError(stmt);
+          generateSkipInfo(stmt);
           return;
         }
       }
     } else if (clang::CastExpr *castExpr = llvm::dyn_cast<clang::CastExpr>(stmt)) {
       if (castExpr->getCastKind() != clang::CastKind::CK_UserDefinedConversion) {
         InstRO::logIt(InstRO::DEBUG) << "Encountered a boring cast expression" << std::endl;
-        generateError(stmt);
+        generateSkipInfo(stmt);
         return;
       }
     }
@@ -210,7 +216,7 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
       if (binaryOp->getOpcode() == clang::BO_Comma) {
         if (isNotAStatement) {
           InstRO::logIt(InstRO::DEBUG) << "Encountered a boring comma operator" << std::endl;
-          generateError(stmt);
+          generateSkipInfo(stmt);
           return;
         } else {
           // use the top level comma operator as pure statement
@@ -231,79 +237,79 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
 
   void VisitCXXThisExpr(clang::CXXThisExpr *stmt) {
     // ignore 'this'
-    generateError(stmt);
+    generateSkipInfo(stmt);
   }
 
   void VisitParenExpr(clang::ParenExpr *stmt) {
     // ignore parentheses
-    generateError(stmt);
+    generateSkipInfo(stmt);
   }
 
   void VisitCXXBoolLiteralExpr(clang::CXXBoolLiteralExpr *stmt) {
     if (!handleConstructsInControlStructures(stmt)) {
       // literals are not considered interesting
-      generateError(stmt);
+      generateSkipInfo(stmt);
     }
   }
 
   void VisitIntegerLiteral(clang::IntegerLiteral *stmt) {
     if (!handleConstructsInControlStructures(stmt)) {
       // literals are not considered interesting
-      generateError(stmt);
+      generateSkipInfo(stmt);
     }
   }
 
   void VisitFloatingLiteral(clang::FloatingLiteral *stmt) {
     if (!handleConstructsInControlStructures(stmt)) {
       // literals are not considered interesting
-      generateError(stmt);
+      generateSkipInfo(stmt);
     }
   }
 
   void VisitCharacterLiteral(clang::CharacterLiteral *stmt) {
     if (!handleConstructsInControlStructures(stmt)) {
       // literals are not considered interesting
-      generateError(stmt);
+      generateSkipInfo(stmt);
     }
   }
 
   void VisitStringLiteral(clang::StringLiteral *stmt) {
     if (!handleConstructsInControlStructures(stmt)) {
       // literals are not considered interesting
-      generateError(stmt);
+      generateSkipInfo(stmt);
     }
   }
 
   void VisitCXXNullPtrLiteralExpr(clang::CXXNullPtrLiteralExpr *stmt) {
     if (!handleConstructsInControlStructures(stmt)) {
       // literals are not considered interesting
-      generateError(stmt);
+      generateSkipInfo(stmt);
     }
   }
 
   void VisitDeclRefExpr(clang::DeclRefExpr *stmt) {
     if (!handleConstructsInControlStructures(stmt)) {
       // references to declarations (variables) are not considered interesting
-      generateError(stmt);
+      generateSkipInfo(stmt);
     }
   }
 
   void VisitImplicitCastExpr(clang::ImplicitCastExpr *stmt) {
     // not considered interesting
-    generateError(stmt);
+    generateSkipInfo(stmt);
   }
 
-  void VisitUnresolvedLookupExpr(clang::UnresolvedLookupExpr *stmt) { generateError(stmt); }
+  void VisitUnresolvedLookupExpr(clang::UnresolvedLookupExpr *stmt) { generateSkipInfo(stmt); }
 
   void VisitArraySubscriptExpr(clang::ArraySubscriptExpr *stmt) {
     // array subscript operator has no observable behavior
     // overloading the operator in a class should instead lead to a 'CXXOperatorCallExpr'
-    generateError(stmt);
+    generateSkipInfo(stmt);
   }
 
   void VisitMemberExpr(clang::MemberExpr *stmt) {
     // used e.g. by CXXMemberCallExpr to specify the member being called
-    generateError(stmt);
+    generateSkipInfo(stmt);
   }
 
   void VisitReturnStmt(clang::ReturnStmt *stmt) {
@@ -312,7 +318,7 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
     // return statements are not wrappable
   }
 
-  void VisitStmt(clang::Stmt *stmt) { generateError(stmt); }
+  void VisitStmt(clang::Stmt *stmt) { generateSkipInfo(stmt); }
 
   bool isExpressionInLoopOrConditionalHeader(const clang::Expr *expr) {
     auto parents = context.getParents(*expr);
@@ -378,7 +384,7 @@ class StmtConstructTraitVisitor : public clang::StmtVisitor<StmtConstructTraitVi
     }
   }
 
-  void generateError(clang::Stmt *stmt) {
+  void generateSkipInfo(clang::Stmt *stmt) {
     InstRO::logIt(InstRO::INFO) << "Skipping statement " << stmt->getStmtClassName() << "(" << stmt << ")" << std::endl;
   }
 };
@@ -407,8 +413,6 @@ clang::ASTContext &ClangConstruct::getASTContext() {
 }
 
 clang::SourceManager &ClangConstruct::getSourceManager() { return getASTContext().getSourceManager(); }
-
-void ClangConstruct::setASTContext(clang::ASTContext &context) { ClangConstruct::astContext = &context; }
 
 ClangConstruct::ClangConstruct(clang::Decl *decl)
     : Construct(getConstructTrait(getASTContext(), decl)), kind(ConstructKind::CK_Declaration), construct(decl) {}

@@ -160,7 +160,7 @@ def runApply(arguments):
 		print('Adding ScorepRegionAdapterTest to the list of tests to run')
 		testPrograms.append('ScorepRegionAdapterTest')
 
-	baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
+	#baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
 
 	inputDirectory = arguments.src + "/test/input"
 

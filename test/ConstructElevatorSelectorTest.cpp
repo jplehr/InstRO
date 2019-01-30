@@ -4,6 +4,9 @@
 
 #ifdef INSTRO_USE_ROSE
 #include "lib/RoseTestSupport.h"
+#elif INSTRO_USE_CLANG
+#include "lib/ClangTestSupport.h"
+static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
 #endif
 
 #include "instro/utility/Environment.h"
@@ -13,11 +16,14 @@ int main(int argc, char** argv) {
 /*
  * We want to use the same binary for both Rose and Clang
  */
+  using CTrait = InstRO::Core::ConstructTraitType;
 #ifdef INSTRO_USE_ROSE
-	using InstrumentorType = RoseTest::RoseTestInstrumentor;
-	using CTrait = InstRO::Core::ConstructTraitType;
-
-	InstrumentorType instrumentor(argc, argv);
+  using InstrumentorType = RoseTest::RoseTestInstrumentor;
+  InstrumentorType instrumentor(argc, argv);
+#elif INSTRO_USE_CLANG
+  using InstrumentorType = ClangTest::ClangTestInstrumentor;
+  InstrumentorType instrumentor(argc, argv, instroTool);
+#endif
 	auto factory = instrumentor.getFactory();
 
 	std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
@@ -52,10 +58,5 @@ int main(int argc, char** argv) {
 	instrumentor.apply();
 
 	return instrumentor.testFailed();
-#endif
 
-#ifdef USE_CLANG
-	logIt(ERROR) << "Not implemented yet!" << std::endl;
-	return -1;
-#endif
 }
