@@ -49,7 +49,15 @@ rose_*.*
 .cproject
 .settings/
 
+# vscode
+.vscode
+
 # generated documentation
 !docs/Makefile
 docs/html
 docs/latex
+
+
+# build-directories
+clang-build
+build
