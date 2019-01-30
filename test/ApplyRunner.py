@@ -139,6 +139,19 @@ def runTestBinary(arguments, binary, inputDirectory):
 
 	return failedRuns
 
+def addLibFolderForClang(build_path):
+	if os.path.isdir(build_path + '/lib/clang'):
+		return
+	
+	clang_binary = subprocess.check_output('which clang', shell=True)
+	print(clang_binary.strip())
+	clang_lib_dir = clang_binary[: clang_binary.rfind('/')]
+	clang_lib_dir += '/../lib/clang'
+	print('Linking this clang directory: ' + clang_lib_dir)
+	placement_dir = build_path + '/lib/clang'
+	print('Putting it here: ' + placement_dir)
+	os.symlink(clang_lib_dir, placement_dir)
+
 # Runs each TestInstrumentor on the given target list
 def runApply(arguments):
 
@@ -152,6 +165,9 @@ def runApply(arguments):
 	inputDirectory = arguments.src + "/test/input"
 
 	newLDLIBS = os.path.abspath(arguments.build)+'/test/.libs'
+
+	addLibFolderForClang(arguments.build)
+
 	currentLDLIBPATH = os.environ.get('LD_LIBRARY_PATH')
 	if currentLDLIBPATH is None:
 		# environment variable might not be set beforehand
