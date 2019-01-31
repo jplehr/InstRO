@@ -82,12 +82,13 @@ Run `make check` in the top level build directory. For more information please c
 Support for building the InstRO framework with the Clang compiler infrastructure is currently work in progress.
 
 #### Dependencies
-- CMake >= 3.4.3
-- Clang 3.9 (enabled exceptions and RTTI)
-- Boost 1.60
+- CMake >= 3.5
+- Clang 6.0 (you need to build Clang with exceptions and RTTI enabled)
+- Boost 1.64
 
 #### Build steps
 At least in our environment the following steps are sufficient. However, as noted building with Clang is work in progress.
+The path to where to find the boost libraries needs to be adjusted manually for now.
 
 ```bash
 $ mkdir build && cd build
@@ -95,6 +96,19 @@ $ mkdir build && cd build
 $ cmake ../repo
 >> Generating the Makefiles
 $ make
+>> Go to the test directory and run the tests (we currently expect several to fail):
+$ cd test
+$ python2 ~/path_to_repo/test/ApplyRunner.py ~/path_to_repo/source ~/path_to_build/tree "clang"
+```
+In case you want to run a single test with the Clang instrumentor:
+```bash
+$ cd test
+>> Set the file with the expected results
+>> BinaryName == the instrumentor you want to run
+>> TestTarget == the target input file for the respective test case
+$ export INSTRO_TEST_INPUT_FILENAME=~/path_to_repo/test/input/BinaryName/TestTarget.in
+>> Run the test
+$ ./ConstructHierarchySelectionTest /path_to_repo/test/input/TestTarget.cpp --
 ```
 
 ## Using InstRO
