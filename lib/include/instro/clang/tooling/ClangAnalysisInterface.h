@@ -4,6 +4,7 @@
 #include "instro/tooling/AnalysisInterface.h"
 
 #include "instro/clang/tooling/ClangConstructTraitInterface.h"
+#include "instro/clang/tooling/ClangNamedConstructAccess.h"
 
 namespace InstRO {
 namespace Clang {
@@ -12,7 +13,8 @@ namespace Tooling {
 class ClangAnalysisManager : public InstRO::Tooling::AnalysisManager {
  public:
   ClangAnalysisManager(clang::ASTContext &context)
-      : cti(new ConstructTraitInterface::ClangConstructTraitInterface(context)) {}
+      : cti(new ConstructTraitInterface::ClangConstructTraitInterface(context)),
+        nca(new NamedConstructAccess::ClangNamedConstructAccess(context)) {}
   ClangAnalysisManager() = delete;
   virtual ~ClangAnalysisManager() {}
 
@@ -23,11 +25,12 @@ class ClangAnalysisManager : public InstRO::Tooling::AnalysisManager {
     return cti.get();
   }
   virtual InstRO::Tooling::NamedConstructAccess::NamedConstructAccess *getNamedConstructAccessFacility() override {
-    return nullptr;
+    return nca.get();
   }
 
  protected:
   std::unique_ptr<ConstructTraitInterface::ClangConstructTraitInterface> cti;
+  std::unique_ptr<NamedConstructAccess::ClangNamedConstructAccess> nca;
 };
 }  // namespace Tooling
 }  // namespace Clang

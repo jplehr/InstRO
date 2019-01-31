@@ -28,7 +28,7 @@ class ClangPassFactory : public InstRO::PassFactory {
   ClangPassFactory(InstRO::PassManagement::PassManager *manager, clang::tooling::Replacements &reps)
       : InstRO::PassFactory(manager), replacements(reps) {}
 
-  InstRO::Pass *createDefaultInstrumentationAdapter(InstRO::Pass *input) { return nullptr; }
+  InstRO::Pass *createDefaultInstrumentationAdapter(InstRO::Pass *input) override { return nullptr; }
 
   Pass *createClangBlackAndWhiteListSelector(std::vector<std::string> blacklist, std::vector<std::string> whitelist);
   Pass *createClangCygProfileAdapter(InstRO::Pass *input);

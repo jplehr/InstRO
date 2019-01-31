@@ -9,3 +9,8 @@ clang::tooling::Replacements InstRO::Clang::Support::mergeToolReplacements(clang
 
   return repls;
 }
+
+std::string InstRO::Clang::Support::addTopLevelNameQualification(const std::string &identifier) {
+  std::string newIdentifier = "::" + identifier;
+  return newIdentifier;
+}

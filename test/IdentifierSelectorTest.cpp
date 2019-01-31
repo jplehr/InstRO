@@ -16,33 +16,38 @@ int main(int argc, char **argv) {
   /*
    * We want to use the same binary for both Rose and Clang
    */
-  using CTrait = InstRO::Core::ConstructTraitType;
+  try {
+    using CTrait = InstRO::Core::ConstructTraitType;
 #ifdef INSTRO_USE_ROSE
-  using InstrumentorType = RoseTest::RoseTestInstrumentor;
-  InstrumentorType instrumentor(argc, argv);
+    using InstrumentorType = RoseTest::RoseTestInstrumentor;
+    InstrumentorType instrumentor(argc, argv);
 #elif INSTRO_USE_CLANG
-  using InstrumentorType = ClangTest::ClangTestInstrumentor;
-  InstrumentorType instrumentor(argc, argv, instroTool);
+    using InstrumentorType = ClangTest::ClangTestInstrumentor;
+    InstrumentorType instrumentor(argc, argv, instroTool);
 #endif
-  auto factory = instrumentor.getFactory();
+    auto factory = instrumentor.getFactory();
 
-  std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
+    std::string filename = InstRO::Utility::getEnvironmentVariable("INSTRO_TEST_INPUT_FILENAME");
 
-  auto idSelector = factory->createIdentifierMatcherSelector({"::foo"});
-  auto idSelector2 = factory->createIdentifierMatcherSelector({"::f#"});
-  auto idSelector3 = factory->createIdentifierMatcherSelector({"#foo"});
-  auto idSelector4 = factory->createIdentifierMatcherSelector({"#f#"});
+    auto idSelector = factory->createIdentifierMatcherSelector({"::foo"});
+    auto idSelector2 = factory->createIdentifierMatcherSelector({"::f#"});
+    auto idSelector3 = factory->createIdentifierMatcherSelector({"#foo"});
+    auto idSelector4 = factory->createIdentifierMatcherSelector({"#f#"});
 
-  factory->createTestAdapter(idSelector, "IdSelector-::foo", filename);
-  factory->createTestAdapter(idSelector2, "IdSelector-::f#", filename);
-  factory->createTestAdapter(idSelector3, "IdSelector-#foo", filename);
-  factory->createTestAdapter(idSelector4, "IdSelector-#f#", filename);
+    factory->createTestAdapter(idSelector, "IdSelector-::foo", filename);
+    factory->createTestAdapter(idSelector2, "IdSelector-::f#", filename);
+    factory->createTestAdapter(idSelector3, "IdSelector-#foo", filename);
+    factory->createTestAdapter(idSelector4, "IdSelector-#f#", filename);
 
 #ifdef DEBUG
-  factory->createConstructPrinterAdapter(idSelector);
+    factory->createConstructPrinterAdapter(idSelector);
 #endif
 
-  instrumentor.apply();
+    instrumentor.apply();
 
-  return instrumentor.testFailed();
+    return instrumentor.testFailed();
+  } catch (std::string s) {
+    std::cout << s << std::endl;
+    return -1;
+  }
 }

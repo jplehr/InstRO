@@ -11,6 +11,7 @@ using namespace InstRO::Clang;
 
 void ClangPassFactory::finishConstruction(clang::ASTContext *context) {
   for (auto p : lazyContextProvidingMap) {
+    assert(p != nullptr && "p is null.");
     p->setASTContext(context);
   }
 }
