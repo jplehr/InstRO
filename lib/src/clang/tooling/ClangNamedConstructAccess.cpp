@@ -11,7 +11,8 @@ using namespace InstRO::Core;
 namespace {
 class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector> {
  public:
-  ConstructCollector(InstRO::Tooling::NamedConstructAccess::Matcher &m, ConstructSet *cs) : matcher(m), csci(cs){};
+  ConstructCollector(InstRO::Tooling::NamedConstructAccess::Matcher &m, ConstructSet *cs, clang::ASTContext &context)
+      : matcher(m), csci(cs), ctx(context){};
 
   bool shouldVisitTemplateInstantiations() { return true; }
 
@@ -25,7 +26,8 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
   bool VisitFunctionDecl(clang::FunctionDecl *fDecl) {
     if (fDecl->isThisDeclarationADefinition()) {
       auto name = fDecl->getQualifiedNameAsString();
-      processIdentifier(std::move(name), fDecl);
+      auto lIdentifier = InstRO::Clang::Support::addTopLevelNameQualification(name);
+      processIdentifier(lIdentifier, fDecl);
     }
 
     return true;
@@ -36,7 +38,8 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
     if (llvm::dyn_cast<clang::NamedDecl>(target)) {
       auto targetND = llvm::dyn_cast<clang::NamedDecl>(target);
       auto identifier = targetND->getQualifiedNameAsString();
-      processIdentifier(std::move(identifier), ce);
+      auto lIdentifier = InstRO::Clang::Support::addTopLevelNameQualification(identifier);
+      processIdentifier(lIdentifier, ce);
     }
     return true;
   }
@@ -44,19 +47,31 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
   bool VisitVarDecl(clang::VarDecl *decl) {
     if (decl->hasInit()) {
       auto identifier = decl->getQualifiedNameAsString();
-      processIdentifier(std::move(identifier), decl);
+      processIdentifier(identifier, decl);
+      if (!decl->getInit()->isEvaluatable(ctx)) {
+        processIdentifier(identifier, decl->getInit());
+      }
     }
+    return true;
+  }
+
+  // FIXME: Not working.
+  bool VisitDeclRefExpr(clang::DeclRefExpr *expr) {
+    auto decl = expr->getDecl();
+    auto identifier = decl->getNameAsString();
+    std::cout << "Identifier: " << identifier << std::endl;
+    processIdentifier(identifier, expr);
     return true;
   }
 
  private:
   InstRO::Tooling::NamedConstructAccess::Matcher &matcher;
   InstRO::InfrastructureInterface::ConstructSetCompilerInterface csci;
+  clang::ASTContext &ctx;
 
   template <typename ClangNodeT>
-  void processIdentifier(std::string &&identifier, ClangNodeT *cn) {
-    auto lIdentifier = InstRO::Clang::Support::addTopLevelNameQualification(identifier);
-    if (matcher.isMatch(lIdentifier)) {
+  void processIdentifier(std::string &identifier, ClangNodeT *cn) {
+    if (matcher.isMatch(identifier)) {
       csci.put(std::make_shared<InstRO::Clang::Core::ClangConstruct>(cn));
     }
   }
@@ -68,7 +83,7 @@ using namespace InstRO::Clang::Tooling::NamedConstructAccess;
 ConstructSet ClangNamedConstructAccess::getConstructsByIdentifierName(
     InstRO::Tooling::NamedConstructAccess::Matcher &matcher) {
   ConstructSet cs;
-  ConstructCollector cc(matcher, &cs);
+  ConstructCollector cc(matcher, &cs, context);
   cc.TraverseDecl(context.getTranslationUnitDecl());
   return cs;
 }
