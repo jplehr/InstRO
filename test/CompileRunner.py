@@ -149,6 +149,10 @@ def generateLogFileAndPrintToScreen():
 
 # We get the parsed commandline arguments and build the flavors accordingly
 def configureAndBuildFlavor(arguments):
+
+    print('This script is outdated!')
+    assert(False)
+
     baseDir = os.getcwd()[0:os.getcwd().rfind('/')]
     tempDirectory = createAndCDToTempDir()
     checkArguments(arguments)

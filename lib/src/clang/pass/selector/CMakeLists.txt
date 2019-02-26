@@ -2,5 +2,7 @@
 add_library(InstRO_clang_selector SHARED ClangBlackWhitelistSelector)
 
 
-target_compile_options(InstRO_clang_selector PUBLIC ${instro_default_options})
-target_include_directories(InstRO_clang_selector PUBLIC ${instro_include_path} "${Boost_INCLUDE_DIRS}")
+target_add_instro_compile_options(InstRO_clang_selector)
+target_include_directories(InstRO_clang_selector PUBLIC ${Boost_INCLUDE_DIRS})
+
+target_add_instro_flags(InstRO_clang_selector)

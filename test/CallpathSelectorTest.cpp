@@ -2,7 +2,7 @@
 #include "instro.h"
 #include <iostream>
 
-#ifdef INSTRO_USE_ROSE
+#if INSTRO_USE_ROSE
 #include "lib/RoseTestSupport.h"
 #elif INSTRO_USE_CLANG
 #include "lib/ClangTestSupport.h"
@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
    * We want to use the same binary for both Rose and Clang
    */
   using CTrait = InstRO::Core::ConstructTraitType;
-#ifdef INSTRO_USE_ROSE
+#if INSTRO_USE_ROSE
   using InstrumentorType = RoseTest::RoseTestInstrumentor;
   InstrumentorType instrumentor(argc, argv);
 #elif INSTRO_USE_CLANG
@@ -50,7 +50,11 @@ int main(int argc, char **argv) {
   auto cpSelector3 = factory->createCallpathSelector(programEntrySelector, idSelector2);
   factory->createTestAdapter(cpSelector3, "PathToBarSelector", filename);
 
+#ifdef INSTRO_USE_CLANG
+  std::cerr << "Not yet functional" << std::endl;
+  return -1;
+#else
   instrumentor.apply();
-
   return instrumentor.testFailed();
+#endif
 }

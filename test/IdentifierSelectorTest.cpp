@@ -2,7 +2,7 @@
 #include "instro.h"
 #include <iostream>
 
-#ifdef INSTRO_USE_ROSE
+#if INSTRO_USE_ROSE
 #include "lib/RoseTestSupport.h"
 #elif INSTRO_USE_CLANG
 #include "lib/ClangTestSupport.h"
@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
    */
   try {
     using CTrait = InstRO::Core::ConstructTraitType;
-#ifdef INSTRO_USE_ROSE
+#if INSTRO_USE_ROSE
     using InstrumentorType = RoseTest::RoseTestInstrumentor;
     InstrumentorType instrumentor(argc, argv);
 #elif INSTRO_USE_CLANG

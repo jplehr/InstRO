@@ -9,7 +9,8 @@
 
 
 #cmakedefine01 INSTRO_DISABLE_EXCEPTIONS @USE_EXCEPTIONS@
-#cmakedefine01 INSTRO_USE_CLANG @NOT_IN_THE_NAME@
+#cmakedefine01 INSTRO_USE_CLANG
+#cmakedefine01 INSTRO_USE_ROSE
 
 
 
@@ -23,11 +24,11 @@ struct BuildInstallConfig {
 	const char *const buildRelativePath = "@top_builddir@";
 
 	// We probe at configure for the two paths
-	const char *const repositoryRealpath = "@am_aux_dir@";
-	const char *const builddirRealpath = "@am_build_dir@";
+	const char *const repositoryRealpath = "@CMAKE_SOURCE_DIR@";
+	const char *const builddirRealpath = "@CMAKE_BINARY_DIR@";
 
 	// This one may be empty, as the user does not need to specify it
-	const char *const prefixAbsolutePath = "@CONFIG_INSTALL_DIR@";
+	const char *const prefixAbsolutePath = "@CMAKE_INSTALL_PREFIX@";
 };
 } // Config
 } // InstRO

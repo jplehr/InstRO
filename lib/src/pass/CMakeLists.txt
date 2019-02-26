@@ -9,5 +9,7 @@ add_library(InstRO_pass SHARED adapter/ConstructPrinterAdapter
 												selector/IdentifierMatcherSelector
 												selector/ProgramEntrySelector)
 
-target_compile_options(InstRO_pass PUBLIC ${instro_default_options})
-target_include_directories(InstRO_pass PUBLIC ${instro_include_path} "${Boost_INCLUDE_DIRS}")
+target_add_instro_compile_options(InstRO_pass)
+target_include_directories(InstRO_pass PUBLIC ${Boost_INCLUDE_DIRS})
+
+target_add_instro_flags(InstRO_pass)

@@ -10,7 +10,7 @@ static llvm::cl::OptionCategory instroTool("InstRO Clang Test");
 
 int main(int argc, char **argv) {
   using CTrait = InstRO::Core::ConstructTraitType;
-#ifdef INSTRO_USE_ROSE
+#if INSTRO_USE_ROSE
   using InstrumentorType = RoseTest::RoseTestInstrumentor;
   InstrumentorType instrumentor(argc, argv);
 #elif INSTRO_USE_CLANG
