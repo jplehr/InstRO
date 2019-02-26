@@ -15,11 +15,12 @@ InstRO::Clang::ClangInstrumentor::ClangInstrumentor(int argc, const char **argv,
 }
 
 InstRO::Clang::ClangPassFactory *InstRO::Clang::ClangInstrumentor::getFactory(CompilationPhase phase) {
-  if (fac == nullptr) {
-    clang::tooling::Replacements repls = InstRO::Clang::Support::mergeToolReplacements(tool);
-    fac.reset(new InstRO::Clang::ClangPassFactory(passManager, repls));
+  if (clangPassFactory == nullptr) {
+    auto repls = InstRO::Clang::Support::mergeToolReplacements(tool);
+    // Move to C++14
+    clangPassFactory = std::make_unique<ClangPassFactory>(passManager, repls);
   }
-  return fac.get();
+  return clangPassFactory.get();
 }
 
 clang::tooling::RefactoringTool &InstRO::Clang::ClangInstrumentor::getTool() { return tool; }
@@ -29,17 +30,23 @@ void InstRO::Clang::ClangInstrumentor::apply() {
 
   auto repls = InstRO::Clang::Support::mergeToolReplacements(tool);
   InstRO::Clang::Support::ClangConsumerFactory f(passManager, repls, getFactory());
-  tool.runAndSave(clang::tooling::newFrontendActionFactory<InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
+
+  if(modify) {
+    tool.runAndSave(clang::tooling::newFrontendActionFactory<InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
+  } else {
+    std::cout << "Running in non-modifying context." << std::endl;
+    tool.run(clang::tooling::newFrontendActionFactory<InstRO::Clang::Support::ClangConsumerFactory>(&f).get());
+  }
 }
 
 void InstRO::Clang::ClangInstrumentor::initializeAnalysisManager(clang::ASTContext &context) {
-  cam = std::make_unique<InstRO::Clang::Tooling::ClangAnalysisManager>(context);
+  clangAnalysisManager = std::make_unique<InstRO::Clang::Tooling::ClangAnalysisManager>(context);
 }
 
 InstRO::Tooling::AnalysisManager *InstRO::Clang::ClangInstrumentor::getAnalysisManager() {
-  if (!cam) {
+  if (!clangAnalysisManager) {
     InstRO::raise_exception("AnalysisManager has not yet been initialized");
   }
 
-  return cam.get();
+  return clangAnalysisManager.get();
 }

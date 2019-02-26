@@ -41,6 +41,8 @@ class ClangInstrumentor : public InstRO::Instrumentor {
   /// Initializes the AnalysisManager using the provided clang::ASTContext.
   void initializeAnalysisManager(clang::ASTContext &context);
 
+  void setNonModifying() { modify = false; }
+
  protected:
   clang::tooling::RefactoringTool &getTool();
 
@@ -49,8 +51,9 @@ class ClangInstrumentor : public InstRO::Instrumentor {
   const char **argv;
   clang::tooling::CommonOptionsParser cop;
   clang::tooling::RefactoringTool tool;
-  std::unique_ptr<InstRO::Clang::ClangPassFactory> fac;
-  std::unique_ptr<InstRO::Clang::Tooling::ClangAnalysisManager> cam;
+  std::unique_ptr<InstRO::Clang::ClangPassFactory> clangPassFactory;
+  std::unique_ptr<InstRO::Clang::Tooling::ClangAnalysisManager> clangAnalysisManager;
+  bool modify = true;
 };
 }  // namespace Clang
 }  // namespace InstRO

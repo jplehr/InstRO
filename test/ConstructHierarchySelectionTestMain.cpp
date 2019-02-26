@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
 #if INSTRO_USE_CLANG
 		using InstrumentorType = ClangTest::ClangTestInstrumentor;
 		InstrumentorType instrumentor(argc, argv, instroTool);
+		instrumentor.setNonModifying();
 #endif
 
 		auto factory = instrumentor.getFactory();
