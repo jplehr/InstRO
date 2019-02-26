@@ -12,6 +12,7 @@
 
 #include "boost/algorithm/string/replace.hpp"
 #include "boost/algorithm/string/trim.hpp"
+#include "boost/algorithm/string/split.hpp"
 
 using namespace InstRO::Core;
 using namespace InstRO::Clang::Core;
@@ -485,8 +486,11 @@ std::string ClangConstruct::getIdentifier() const {
     InstRO::raise_exception("Unknown type in ClangConstruct");
   }
 
-  identifier =
-      (sourceManager.getFilename(location) + ":" + llvm::Twine((sourceManager.getSpellingLineNumber(location)))).str();
+  auto fileName = sourceManager.getFilename(location);
+  std::vector<std::string> splits;
+  boost::split(splits, fileName, boost::is_any_of("/"));
+
+  identifier = (splits.back() + ":" + llvm::Twine((sourceManager.getSpellingLineNumber(location)))).str();
   identifier += ":" + std::to_string(sourceManager.getSpellingColumnNumber(location));
   identifier += "--" + specificConstructTraitToString();
 

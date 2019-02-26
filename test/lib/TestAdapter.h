@@ -72,10 +72,15 @@ class TestAdapter : public InstRO::Core::PassImplementation {
 	std::string label;
 	std::string filename;
 	TestSummary* summary;
-	// To allow for multi occurence we save the marked values in markedValues and have a set_difference at the end
+	// To allow for multi occurrence we save the marked values in markedItems and have a set_difference at the end
+	/* The identifiers of the expected items */
 	std::multiset<std::string> expectedItems;
+	/* The identifiers of the marked items */
 	std::multiset<std::string> markedItems;
+	/* The identifiers of the erroneously marked constructs */
 	std::multiset<std::string> erroneouslyContainedInConstructSet;
+
+	/* Additionally marked constructs */
 	std::set<std::shared_ptr<InstRO::Core::Construct>> addMarkedConstructs;
 };
 }	// namespace Test

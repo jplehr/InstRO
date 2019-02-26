@@ -24,10 +24,12 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
   - ?
   */
   bool VisitFunctionDecl(clang::FunctionDecl *fDecl) {
+    // std::cout << "ConstructCollector::VisitFunctionDecl" << std::endl;
     if (fDecl->isThisDeclarationADefinition()) {
       auto name = fDecl->getQualifiedNameAsString();
       auto lIdentifier = InstRO::Clang::Support::addTopLevelNameQualification(name);
       processIdentifier(lIdentifier, fDecl);
+      // std::cout << "ConstructCollector::VisitFunctionDecl END" << std::endl;
     }
 
     return true;
@@ -35,7 +37,8 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
 
   bool VisitCallExpr(clang::CallExpr *ce) {
     auto target = ce->getCalleeDecl();
-    if (llvm::dyn_cast<clang::NamedDecl>(target)) {
+    // std::cout << "ConstructCollector::VisitCallExpr" << std::endl;
+    if (target && llvm::dyn_cast<clang::NamedDecl>(target)) {
       auto targetND = llvm::dyn_cast<clang::NamedDecl>(target);
       auto identifier = targetND->getQualifiedNameAsString();
       auto lIdentifier = InstRO::Clang::Support::addTopLevelNameQualification(identifier);
@@ -45,21 +48,31 @@ class ConstructCollector : public clang::RecursiveASTVisitor<ConstructCollector>
   }
 
   bool VisitVarDecl(clang::VarDecl *decl) {
+    // std::cout << "ConstructCollector::VisitVarDecl" << std::endl;
     if (decl->hasInit()) {
       auto identifier = decl->getQualifiedNameAsString();
       processIdentifier(identifier, decl);
-      if (!decl->getInit()->isEvaluatable(ctx)) {
-        processIdentifier(identifier, decl->getInit());
+
+      auto init = decl->getInit();
+      // Account for foldable expressions, the isEvaluatable bails our with some assertion. I'm not sure how to fix.
+      // XXX FOR NOW: We consider an expression without side effects not interesting
+      if (!init->HasSideEffects(ctx)) {
+        // FIXME how to call *init->isEvaluatable* without triggering various asserts?
+        // if (init->isRValue() || init->getType()->hasPointerRepresentation() || init->isEvaluatable(ctx)) {
+        return true;
       }
+
+      processIdentifier(identifier, init);
     }
     return true;
   }
 
   // FIXME: Not working.
   bool VisitDeclRefExpr(clang::DeclRefExpr *expr) {
+    // std::cout << "ConstructCollector::VisitDeclRefExpr Enter" << std::endl;
     auto decl = expr->getDecl();
     auto identifier = decl->getNameAsString();
-    std::cout << "Identifier: " << identifier << std::endl;
+    // std::cout << "ConstructCollector::VisitDeclRefExpr -> Identifier: " << identifier << std::endl;
     processIdentifier(identifier, expr);
     return true;
   }

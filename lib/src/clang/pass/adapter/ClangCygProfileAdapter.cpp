@@ -176,10 +176,10 @@ void ClangCygProfileAdapter::transformReturnStmt(clang::ReturnStmt *retStmt) {
   std::string tVar(t.getAsString() + iVarName + " = " + s.str() + ";");
 
   // refer in return statement to newly created variable
-  replacements.add(clang::tooling::Replacement(*sm, e, iVarName));
+  auto err = replacements.add(clang::tooling::Replacement(*sm, e, iVarName));
 
   // insert the declaration of the newly created temporary
-  replacements.add(clang::tooling::Replacement(*sm, retStmt->getLocStart(), 0, tVar));
+  err = replacements.add(clang::tooling::Replacement(*sm, retStmt->getLocStart(), 0, tVar));
 }
 
 std::string ClangCygProfileAdapter::generateFunctionEntry(clang::FunctionDecl *d) {

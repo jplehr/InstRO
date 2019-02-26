@@ -19,14 +19,14 @@ class PassManager;
 
 /**
  * The Pass class is the administration class used within the pass manager.
- * It holds information necessary in order to singalize the pass implementation
+ * It holds information necessary in order to signalize the pass implementation
  * whether it can be run or not.
  */
 class Pass {
   friend InstRO::PassManagement::PassManager;
 
  public:
-  // CI empty pass construction disallowed. Each Pass is an container for the corresponding PassImplementation Object
+  // Empty pass construction disallowed. Each Pass is a container for the corresponding PassImplementation Object
   // from the ToolingSpace
   Pass() = delete;
 
@@ -46,10 +46,10 @@ class Pass {
     passImplementation = nullptr;
   }
 
-  // CI: Tell the pass, that is is allowed to initialize itself
+  // Tell the pass, that is is allowed to initialize itself
   void initPass();
 
-  // CI: Execute the pass, this generates the output-constructset
+  // Execute the pass, this generates the output-constructset
   void executePass();
 
   // Finalizes the pass, ie close files etcpp

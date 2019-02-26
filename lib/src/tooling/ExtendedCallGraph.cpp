@@ -82,9 +82,9 @@ std::set<ExtendedCallGraphNode *> ExtendedCallGraph::getSuccessors(ExtendedCallG
   return successors[start];
 }
 
-int ExtendedCallGraph::getPredecessorCount(ExtendedCallGraphNode *start) { return predecessors[start].size(); }
+auto ExtendedCallGraph::getPredecessorCount(ExtendedCallGraphNode *start) { return predecessors[start].size(); }
 
-int ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode *start) { return successors[start].size(); }
+auto ExtendedCallGraph::getSuccessorCount(ExtendedCallGraphNode *start) { return successors[start].size(); }
 
 InstRO::Core::ConstructSet ExtendedCallGraph::getAllReachablePredecessors(
     std::set<ExtendedCallGraphNode *> startNodes) {

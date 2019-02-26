@@ -25,8 +25,13 @@ void ConstructPrinterAdapter::execute() {
   unsigned long count = 0;
   for (auto construct : cs) {
     std::cout << std::setw(4) << count << ": " << construct->getTraits().toStringShort() << ":  "
-              << construct->toString() << std::endl;
+              << construct->toString();
     count++;
+
+#ifdef DEBUG
+    std::cout << "\n" << construct->getIdentifier() << "\n";
+#endif
+    std::cout << std::endl;
   }
 }
 
